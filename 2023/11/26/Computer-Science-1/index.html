@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Computer Science () | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="C语言作业中关于指针与数组的一些认识1.字符数组很像二维数组？？12345678910111213141516&#x2F;&#x2F;有以下程序main()&amp;#123;    char *a[]&#x3D;&amp;#123;&quot;abcd&quot;,&quot;ef&quot;,&quot;gh&quot;,&quot;ijk&quot;&amp;#125;;int i;     for(i&#x3D;0;i&lt;4;i++)     pr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Computer Science ()">
+<meta property="og:url" content="http://example.com/2023/11/26/Computer-Science-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="C语言作业中关于指针与数组的一些认识1.字符数组很像二维数组？？12345678910111213141516&#x2F;&#x2F;有以下程序main()&amp;#123;    char *a[]&#x3D;&amp;#123;&quot;abcd&quot;,&quot;ef&quot;,&quot;gh&quot;,&quot;ijk&quot;&amp;#125;;int i;     for(i&#x3D;0;i&lt;4;i++)     pr">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-11-26T15:29:15.000Z">
+<meta property="article:modified_time" content="2023-11-28T11:19:31.956Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Computer-Science-1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/26/Computer-Science-1/" class="article-date">
+  <time class="dt-published" datetime="2023-11-26T15:29:15.000Z" itemprop="datePublished">2023-11-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Computer Science ()
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="C语言作业中关于指针与数组的一些认识"><a href="#C语言作业中关于指针与数组的一些认识" class="headerlink" title="C语言作业中关于指针与数组的一些认识"></a>C语言作业中关于指针与数组的一些认识</h1><h2 id="1-字符数组很像二维数组？？"><a href="#1-字符数组很像二维数组？？" class="headerlink" title="1.字符数组很像二维数组？？"></a>1.字符数组很像二维数组？？</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//有以下程序</span></span><br><span class="line"></span><br><span class="line">main()</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> *a[]=&#123;<span class="string">&quot;abcd&quot;</span>,<span class="string">&quot;ef&quot;</span>,<span class="string">&quot;gh&quot;</span>,<span class="string">&quot;ijk&quot;</span>&#125;;<span class="type">int</span> i;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)</span><br><span class="line"></span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>,a[i]);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//程序运行后输出的结果是(    )。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这是一个指针数组，也就是说a里面包含着这四个字符串的地址。注意到，字符串的输出，只要给出首地址，所以，输出结果显然是</p>
+<p>abcdefghijk</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">有以下程序</span><br><span class="line"></span><br><span class="line">main()</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> *a[]=&#123;<span class="string">&quot;abcd&quot;</span>,<span class="string">&quot;ef&quot;</span>,<span class="string">&quot;gh&quot;</span>,<span class="string">&quot;ijk&quot;</span>&#125;;<span class="type">int</span> i;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)</span><br><span class="line"></span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>,*a[i]);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">程序运行后输出的结果是(    )。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这次的输出加上了一个*，一开始我以为加上 *不影响输出结果，因为我认为a里面存着地址嘛，加上星号才找到元素。但这样想就错了，字符指针数组它有点像二维数组， *使得它指向第一个字符串的首字母。所以，它的输出为aegi</p>
+<p>下面看个题目</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//【题目描述】编写一程序，功能是：输入n个国家名称，使用选择法排序从小到大排序后输出，输出时每个名称间用一个空格隔开。例如：</span></span><br><span class="line"><span class="comment">//输入：China France Britain Russia America</span></span><br><span class="line"><span class="comment">//输出：America Britain China France Russia</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> str[<span class="number">1000</span>][<span class="number">1000</span>];</span><br><span class="line">	<span class="type">char</span>* temp;</span><br><span class="line">	<span class="type">char</span>*p[<span class="number">1000</span>];</span><br><span class="line">	<span class="type">int</span> i,n,j;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">	   <span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,str[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		p[i]=str[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n<span class="number">-1</span>;i++)</span><br><span class="line">	&#123;</span><br><span class="line">	  <span class="keyword">for</span>(j=i+<span class="number">1</span>;j&lt;n;j++)</span><br><span class="line">	  &#123;</span><br><span class="line">		  <span class="keyword">if</span>(<span class="built_in">strcmp</span>(p[i],p[j])&gt;<span class="number">0</span>)</span><br><span class="line">		  &#123;</span><br><span class="line">			  temp=p[i];</span><br><span class="line">			  p[i]=p[j];</span><br><span class="line">			  p[j]=temp;</span><br><span class="line"></span><br><span class="line">		  &#125;</span><br><span class="line">	  &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%s &quot;</span>,p[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里我们运用了一个选择排序算法，（我本人想强化一下指针的运用，于是用指针写了这题），这里输出我们用p[i]，打印出所以的字符串</p>
+<h2 id="2-二维数组题目的一些小分享"><a href="#2-二维数组题目的一些小分享" class="headerlink" title="2.二维数组题目的一些小分享"></a>2.二维数组题目的一些小分享</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">main()</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> a[<span class="number">2</span>][<span class="number">4</span>];</span><br><span class="line"></span><br><span class="line">        <span class="built_in">strcpy</span>(a[<span class="number">0</span>],<span class="string">&quot;are&quot;</span>);<span class="built_in">strcpy</span>(a[<span class="number">1</span>],<span class="string">&quot;you&quot;</span>);</span><br><span class="line"></span><br><span class="line">        a[<span class="number">0</span>][<span class="number">3</span>]=<span class="string">&#x27;&amp;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,a[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>a为一个二维数组，strcpy()将 are复制过去，所以a的第0行为 are\0</p>
+<p>同理，a的第1行为you\0，&amp;把\0替换掉</p>
+<p>所以输出are&amp;you</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//有以下程序</span></span><br><span class="line"></span><br><span class="line">main()</span><br><span class="line"></span><br><span class="line">&#123;<span class="type">char</span> str[][<span class="number">10</span>]=&#123;<span class="string">&quot;China&quot;</span>,<span class="string">&quot;Beijing&quot;</span>&#125;,*p=*str;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,p+<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//程序运行后的输出结果是（     ）。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>首先定义了一个二维数组，这个二维数组的存放张这样</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1</strong></td>
+<td>C</td>
+<td>h</td>
+<td>i</td>
+<td>n</td>
+<td>a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>B</td>
+<td>e</td>
+<td>i</td>
+<td>j</td>
+<td>i</td>
+<td>n</td>
+<td>g</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>注意到这个语句  char *p&#x3D; *str； 注意区分 char *p&#x3D;str;</p>
+<p>p从str[0] [0]开始，p+10指向str[1] [0]，也就是指向第1行，由于字符串的输出只需要给出首地址，所以输出结果是Beijing</p>
+<p>注意区分p+10 和*(p+10),后者输出后是单个str [1] [0]元素，前者是str [1] [0] 的地址，输出时会把整个字符串输出。所以这就是和第一个例子吻合了 。字符指针数组和二维数组非常相似。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/11/26/Computer-Science-1/" data-id="clrw56q210003osuobz2jchri" data-title="Computer Science ()" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/01/27/ctf/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          ctf
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/11/12/Computer-science-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Computer science(2)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/01/27/ctf/">ctf</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/26/Computer-Science-1/">Computer Science ()</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/12/Computer-science-2/">Computer science(2)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/02/Computer-Science-0/">Computer Science</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/02/Compuer-science/">science</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

