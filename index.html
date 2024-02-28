@@ -100,7 +100,9 @@
 
 <p>O 表示object，一个对象<br>6 表示对象名长度为6<br>object 对象名称<br>3 表示有3个属性</p>
 <p>对象类型:对象长度:“对象名称”:类中变量的个数:{变量类型:长度:“名称”;类型:长度:“值”;…}</p>
-<p>O:6:”object”:3:{s:5:”joker”;s:6:”hahaha”;s:6:”biubiu”;}</p>
+<p>需要注意的是变量受到不同修饰符（public，private，protected）修饰进行序列化时，序列化后变量的长度和名称会发生变化。<br>使用public修饰进行序列化后，变量$team的长度为4，正常输出。<br>使用private修饰进行序列化后，会在变量$team_name前面加上类的名称，在这里是object，并且长度会比正常大小多2个字节，也就是9+6+2&#x3D;17。<br>使用protected修饰进行序列化后，会在变量$team_group前面加上*，并且长度会比正常大小多3个字节，也就是10+3&#x3D;13。<br>通过对比发现，在受保护的成员前都多了两个字节，受保护的成员在序列化时规则：<br>1.受Private修饰的私有成员，序列化时: \x00 + [私有成员所在类名] + \x00 [变量名]<br>2. 受Protected修饰的成员，序列化时：\x00 + * + \x00 + [变量名]<br>其中，“\x00”代表ASCII为0的值，即空字节，” * “ 必不可少。</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_31088019/article/details/126519989">https://blog.csdn.net/qq_31088019/article/details/126519989</a></p>
+<p>O:6:”object”:3:{s:4:”team”;s:5:”joker”;s:17:<br>objectteam_name”;s:6:”hahaha”;s:13:”*team_group”;s:6:”biubiu”;}</p>
 <h2 id="3-例题"><a href="#3-例题" class="headerlink" title="3.例题"></a>3.例题</h2><p><a target="_blank" rel="noopener" href="https://www.nssctf.cn/problem/426">https://www.nssctf.cn/problem/426</a></p>
 <p>题目链接</p>
 <p>看题</p>
