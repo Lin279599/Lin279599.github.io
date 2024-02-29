@@ -73,6 +73,60 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-ctf-php-3" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/02/29/ctf-php-3/" class="article-date">
+  <time class="dt-published" datetime="2024-02-29T14:28:30.000Z" itemprop="datePublished">2024-02-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/02/29/ctf-php-3/">ctf-php-3</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="CTF-php-3"><a href="#CTF-php-3" class="headerlink" title="CTF-php-3"></a>CTF-php-3</h1><h2 id="反序列化、伪协议、弱比较"><a href="#反序列化、伪协议、弱比较" class="headerlink" title="反序列化、伪协议、弱比较"></a>反序列化、伪协议、弱比较</h2><p><strong>题目链接：</strong><a target="_blank" rel="noopener" href="https://www.nssctf.cn/note/set/2921">https://www.nssctf.cn/note/set/2921</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">show_source(__FILE__);</span><br><span class="line">$username  = &quot;this_is_secret&quot;; </span><br><span class="line">$password  = &quot;this_is_not_known_to_you&quot;; </span><br><span class="line">include(&quot;flag.php&quot;);//here I changed those two </span><br><span class="line">$info = isset($_GET[&#x27;info&#x27;])? $_GET[&#x27;info&#x27;]: &quot;&quot; ;</span><br><span class="line">$data_unserialize = unserialize($info);</span><br><span class="line">if ($data_unserialize[&#x27;username&#x27;]==$username&amp;&amp;$data_unserialize[&#x27;password&#x27;]==$password)&#123;</span><br><span class="line">    echo $flag;</span><br><span class="line">&#125;else&#123;</span><br><span class="line">    echo &quot;username or password error!&quot;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>代码分析：</p>
+<p>定义一个数组，username&#x3D;“this_is_secret” password&#x3D;“this_is_not_known_to_you”</p>
+<p>再反序列化</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$ab=array(</span><br><span class="line">    &#x27;username&#x27;=&gt;&quot;this_is_secret&quot;,</span><br><span class="line">	&#x27;password&#x27;=&gt;&quot;this_is_not_known_to_you&quot;</span><br><span class="line">);</span><br><span class="line">$b=serialize($ab);</span><br><span class="line">echo $b;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?info=a:2:&#123;s:8:&quot;username&quot;;s:14:&quot;this_is_secret&quot;;s:8:&quot;password&quot;;s:24:&quot;this_is_not_known_to_you&quot;;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>显示错误</p>
+<h4 id="忽略了源代码中的：include-“flag-php”-here-I-changed-those-two"><a href="#忽略了源代码中的：include-“flag-php”-here-I-changed-those-two" class="headerlink" title="忽略了源代码中的：include(“flag.php”);&#x2F;&#x2F;here I changed those two"></a>忽略了源代码中的：include(“flag.php”);&#x2F;&#x2F;here I changed those two</h4><p>这里的&#x3D;&#x3D;是一个弱比较</p>
+<p>因为ture类型和什么都比较都为真</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?info=a:2:&#123;s:8:&quot;username&quot;;b:1;s:8:&quot;password&quot;;b:1;&#125;真</span><br></pre></td></tr></table></figure>
+
+<p>显示flag</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/02/29/ctf-php-3/" data-id="clt7bw5z10000v8uo7fsh5mnd" data-title="ctf-php-3" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-CTF-php-0" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/02/29/CTF-php-0/" class="article-date">
@@ -747,58 +801,12 @@
 
 
   
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/10/28/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2023-10-28T14:15:45.332Z" itemprop="datePublished">2023-10-28</time>
-</a>
+
+
+  <nav id="page-nav">
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2023/10/28/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/10/28/hello-world/" data-id="clrz6k5np0007mkuoezcxfuxm" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
 
 </section>
         
@@ -829,6 +837,10 @@
       <ul>
         
           <li>
+            <a href="/2024/02/29/ctf-php-3/">ctf-php-3</a>
+          </li>
+        
+          <li>
             <a href="/2024/02/29/CTF-php-0/">CTF-php</a>
           </li>
         
@@ -842,10 +854,6 @@
         
           <li>
             <a href="/2023/11/26/Computer-Science-1/">Computer Science ()</a>
-          </li>
-        
-          <li>
-            <a href="/2023/11/12/Computer-science-2/">Computer science(2)</a>
           </li>
         
       </ul>
