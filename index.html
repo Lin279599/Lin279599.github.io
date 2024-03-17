@@ -73,6 +73,55 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-CTF-Crypto-1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/03/17/CTF-Crypto-1/" class="article-date">
+  <time class="dt-published" datetime="2024-03-17T03:35:44.000Z" itemprop="datePublished">2024-03-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/03/17/CTF-Crypto-1/">CTF-Crypto-1</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Crypto-共模攻击"><a href="#Crypto-共模攻击" class="headerlink" title="Crypto-共模攻击"></a>Crypto-共模攻击</h1><p><a target="_blank" rel="noopener" href="https://www.nssctf.cn/problem/1864%E9%A2%98%E7%9B%AE%E6%9D%A5%E6%BA%90">https://www.nssctf.cn/problem/1864题目来源</a> HGAME RSA ATTACK2</p>
+<h2 id="数学原理"><a href="#数学原理" class="headerlink" title="数学原理"></a>数学原理</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45564150/article/details/124656223?spm=1001.2014.3001.5506%E5%8F%82%E8%80%83%E5%8D%9A%E5%AE%A2">https://blog.csdn.net/qq_45564150/article/details/124656223?spm=1001.2014.3001.5506参考博客</a></p>
+<p>先回顾一下RSA加密原理</p>
+<p><strong>RSA的工作原理，RSA涉及的几个参数</strong><br><strong>明文&#x3D;&gt;m</strong><br><strong>密文&#x3D;&gt;c</strong><br><strong>模n，负责计算出两个质数p和q  p和q计算欧拉函数值Φ(n)</strong><br><strong>欧拉函数Φ(n)&#x3D;&gt; Φ(n)&#x3D;(p-1)*(q-1)</strong><br><strong>公钥参数e和私钥参数d，可由欧拉函数计算出  ed ≡ 1(mod Φ(n))</strong><br><strong>加密&#x3D;&gt; m^e≡c (mod n)</strong><br><strong>解密&#x3D;&gt; c^d ≡m (mod n)</strong></p>
+<p>模攻击<br>共模是指：就是明文m,相同。用两个公钥e1,e2加密得到两个私钥d1,d2 和两个密文c1,c2<br>共模攻击，即当m不变的情况下，知道n,e1,e2,c1,c2, 可以在不知道d1,d2的情况下，解出m<br>利用条件为&#x3D;&gt; gcd(e1,e2)&#x3D;1</p>
+<p>根据扩展欧几里得 算法得<br>可以得到该式子的一组解(s1,s2) 假设s1为正数，s2为负数<br>有整数s1,s2(一正一负)<br>存在e1<em>s1+e2</em>s2&#x3D;&#x3D;1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">因为gcd(e1,e2)=1</span><br><span class="line">根据扩展欧几里得得到 e1*s1+e2*s2=1    s1,s2中一正一负，设s1为正，s2为负</span><br><span class="line">c1 = m^e1%n   c2 = m^e2%n</span><br><span class="line">(c1^s1)*(c2^s2)%n=((m^e1%n)^s1*(m^e2%n)^s2)%n</span><br><span class="line">=&gt;(c1^s1)*(c2^s2)%n=((m^e1)^s1*(m^e2)^s2)%n       #(a*b)%n=(a%n*b%n)%n</span><br><span class="line">=&gt;(c1^s1)*(c2^s2)%n=(m^(e1^s1+e2^s2))%n              #同底数幂</span><br><span class="line">=&gt;(c1^s1)*(c2^s2)%n=(m^(1))%n    e1*s1+e2*s2=1     </span><br><span class="line">=&gt;(c1^s1)*(c2^s2)%n=m%n</span><br><span class="line">=&gt;(c1^s1)*(c2^s2)=m</span><br><span class="line">可得m=(c1^s1)*(c2^s2)%n</span><br><span class="line"></span><br><span class="line">gcd(e1,e2)=1</span><br><span class="line">e1*s1+e2*s2=1</span><br><span class="line">m</span><br><span class="line">=&gt;m^1</span><br><span class="line">=&gt;m(e1*s1+e2*s2)</span><br><span class="line">=&gt;((m^e1)^s1*(m^e2)^s2)</span><br><span class="line">=&gt;(c1^s1)*(c2^s2)</span><br><span class="line"></span><br><span class="line">根据模运算性质</span><br><span class="line">(a*b)%n=(a%n*b%n)%n</span><br></pre></td></tr></table></figure>
+
+<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><p>所以本题的攻击脚本（3）为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#task3</span><br><span class="line">n4 = 18819509188106230363444813350468162056164434642729404632983082518225388069544777374544142317612858448345344137372222988033366528086236635213756227816610865045924357232188768913642158448603346330462535696121739622702200540344105464126695432011739181531217582949804939555720700457350512898322376591813135311921904580338340203569582681889243452495363849558955947124975293736509426400460083981078846138740050634906824438689712748324336878791622676974341814691041262280604277357889892211717124319329666052810029131172229930723477981468761369516771720250571713027972064974999802168017946274736383148001865929719248159075729</span><br><span class="line">e3 = 2519901323</span><br><span class="line">c4 = 3230779726225544872531441169009307072073754578761888387983403206364548451496736513905460381907928107310030086346589351105809028599650303539607581407627819797944337398601400510560992462455048451326593993595089800150342999021874734748066692962362650540036002073748766509347649818139304363914083879918929873577706323599628031618641793074018304521243460487551364823299685052518852685706687800209505277426869140051056996242882132616256695188870782634310362973153766698286258946896866396670872451803114280846709572779780558482223393759475999103607704510618332253710503857561025613632592682931552228150171423846203875344870</span><br><span class="line">e4 = 3676335737</span><br><span class="line">c5 = 940818595622279161439836719641707846790294650888799822335007385854166736459283129434769062995122371073636785371800857633841379139761091890426137981113087519934854663776695944489430385663011713917022574342380155718317794204988626116362865144125136624722782309455452257758808172415884403909840651554485364309237853885251876941477098008690389600544398998669635962495989736021020715396415375890720335697504837045188626103142204474942751410819466379437091569610294575687793060945525108986660851277475079994466474859114092643797418927645726430175928247476884879817034346652560116597965191204061051401916282814886688467861</span><br><span class="line"># 扩展欧几里得算法求出s1,s2的值，满足e1*s1 + e2*s2 = 1</span><br><span class="line">_,s1,s2 = gcdext(e3,e4)</span><br><span class="line">m3 = pow(c4,s1,n4) * pow(c5,s2,n4) % n4</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/03/17/CTF-Crypto-1/" data-id="cltuzb1ef0000dguo7uyl2kqo" data-title="CTF-Crypto-1" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-RCE" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/03/01/RCE/" class="article-date">
@@ -708,106 +757,6 @@
 
 
   
-    <article id="post-Compuer science" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/11/02/Compuer%20science/" class="article-date">
-  <time class="dt-published" datetime="2023-11-02T08:56:15.630Z" itemprop="datePublished">2023-11-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="Compuer-science"><a href="#Compuer-science" class="headerlink" title="Compuer science"></a>Compuer science</h1><h2 id="C语言程序设计："><a href="#C语言程序设计：" class="headerlink" title="C语言程序设计："></a>C语言程序设计：</h2><h3 id="static的性质"><a href="#static的性质" class="headerlink" title="static的性质"></a>static的性质</h3><p>各位uu们大家好，今天我分享一下作为初学者对static在C语言程序设计中的几点看法</p>
-<p>首先给大家介绍一下两个概念，作用域和生命周期：</p>
-<ul>
-<li><p>作用域  ：一段程序代码中的名字不总是有效的，而限定这个名字的可用性时这个名字的作用域</p>
-<ul>
-<li>局部变量的作用域时变量所在的局部范围</li>
-<li>全局变量的作用域是整个工程</li>
-</ul>
-</li>
-<li><p>生命周期：指变量的创建到变量的销毁之间的一个时间段</p>
-<ul>
-<li>局部变量的生命周期是：进入局部变量创建，生命周期开始，出作用域生命周期结束</li>
-<li>全局变量的生命周期是：整个程序的生命周期</li>
-</ul>
-</li>
-</ul>
-<p>下面看我演示</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">int</span> a=<span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    printf(<span class="string">&quot;%d&quot;</span>,a);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>变量a打印不出结果，因为a的作用域在花括号内，出了作用域a被销毁。</p>
-<p>而static的作用是改变变量的生命周期（不改变作用域）</p>
-<ul>
-<li>先说一下static的性质（面试爱考（狗头））<ul>
-<li>修饰全局变量</li>
-<li>修饰局部变量</li>
-<li>修饰函数</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> a =<span class="number">1</span>;</span><br><span class="line">    a++;</span><br><span class="line">    printf(<span class="string">&quot;%d &quot;</span>,a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">int</span> a =<span class="number">1</span>;</span><br><span class="line">    a++;</span><br><span class="line">    printf(<span class="string">&quot;%d &quot;</span>,a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>前一个程序输出的结果是 2 2 2 2 2</p>
-<p>后一个程序输出的结果是 2 3 4 5 6</p>
-<p>因为前一个程序中a每次运行完就销毁了，后一个程序中的a在每次循环中没有被销毁。static改变的了a的生命周期</p>
-<p>本质上，static改变了变量的存储类型</p>
-<table>
-<thead>
-<tr>
-<th>栈区</th>
-<th>栈区的变量特点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>局部变量、形式参数，临时变量</td>
-<td>都是临时的，进入作用域创建，出作用域销毁</td>
-</tr>
-<tr>
-<td><strong>堆区</strong></td>
-<td></td>
-</tr>
-<tr>
-<td>malloc,calloc,realloc,free</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>静态区</strong></td>
-<td><strong>静态区的变量特点</strong></td>
-</tr>
-<tr>
-<td>全局变量，静态变量-被static修饰的变量</td>
-<td>生命周期比较长，和程序的生命周期一样</td>
-</tr>
-</tbody></table>
-<p>一个变量是存在栈区的，但是被static修饰后就存在静态区了，因为存储类型的变化，生命周期跟着变化了，变长了。</p>
-<p>OK！今天的讨论到此结束。</p>
-<h2 id="作者介绍："><a href="#作者介绍：" class="headerlink" title="作者介绍："></a>作者介绍：</h2><ul>
-<li>FAFU计算机与信息学院23级新生Lin</li>
-<li>福建南平建阳人</li>
-<li>偶像是昊杨、江峣哥哥们</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/11/02/Compuer%20science/" data-id="clrz6k5nf0001mkuo0e0o4hvg" data-title="" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -844,6 +793,10 @@
       <ul>
         
           <li>
+            <a href="/2024/03/17/CTF-Crypto-1/">CTF-Crypto-1</a>
+          </li>
+        
+          <li>
             <a href="/2024/03/01/RCE/">RCE</a>
           </li>
         
@@ -857,10 +810,6 @@
         
           <li>
             <a href="/2024/02/28/ctf-php/">ctf-php</a>
-          </li>
-        
-          <li>
-            <a href="/2024/01/27/ctf/">ctf</a>
           </li>
         
       </ul>

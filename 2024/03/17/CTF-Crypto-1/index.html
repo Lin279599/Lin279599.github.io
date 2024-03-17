@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>CTF-Crypto-1 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Crypto-共模攻击https:&#x2F;&#x2F;www.nssctf.cn&#x2F;problem&#x2F;1864题目来源 HGAME RSA ATTACK2 数学原理https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_45564150&#x2F;article&#x2F;details&#x2F;124656223?spm&#x3D;1001.2014.3001.5506参考博客 先回顾一下RSA加密原理 RSA的工作原理，RSA涉及的几个参数明文&#x3D;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF-Crypto-1">
+<meta property="og:url" content="http://example.com/2024/03/17/CTF-Crypto-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Crypto-共模攻击https:&#x2F;&#x2F;www.nssctf.cn&#x2F;problem&#x2F;1864题目来源 HGAME RSA ATTACK2 数学原理https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_45564150&#x2F;article&#x2F;details&#x2F;124656223?spm&#x3D;1001.2014.3001.5506参考博客 先回顾一下RSA加密原理 RSA的工作原理，RSA涉及的几个参数明文&#x3D;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-03-17T03:35:44.000Z">
+<meta property="article:modified_time" content="2024-03-17T03:50:05.807Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-CTF-Crypto-1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/03/17/CTF-Crypto-1/" class="article-date">
+  <time class="dt-published" datetime="2024-03-17T03:35:44.000Z" itemprop="datePublished">2024-03-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      CTF-Crypto-1
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Crypto-共模攻击"><a href="#Crypto-共模攻击" class="headerlink" title="Crypto-共模攻击"></a>Crypto-共模攻击</h1><p><a target="_blank" rel="noopener" href="https://www.nssctf.cn/problem/1864%E9%A2%98%E7%9B%AE%E6%9D%A5%E6%BA%90">https://www.nssctf.cn/problem/1864题目来源</a> HGAME RSA ATTACK2</p>
+<h2 id="数学原理"><a href="#数学原理" class="headerlink" title="数学原理"></a>数学原理</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45564150/article/details/124656223?spm=1001.2014.3001.5506%E5%8F%82%E8%80%83%E5%8D%9A%E5%AE%A2">https://blog.csdn.net/qq_45564150/article/details/124656223?spm=1001.2014.3001.5506参考博客</a></p>
+<p>先回顾一下RSA加密原理</p>
+<p><strong>RSA的工作原理，RSA涉及的几个参数</strong><br><strong>明文&#x3D;&gt;m</strong><br><strong>密文&#x3D;&gt;c</strong><br><strong>模n，负责计算出两个质数p和q  p和q计算欧拉函数值Φ(n)</strong><br><strong>欧拉函数Φ(n)&#x3D;&gt; Φ(n)&#x3D;(p-1)*(q-1)</strong><br><strong>公钥参数e和私钥参数d，可由欧拉函数计算出  ed ≡ 1(mod Φ(n))</strong><br><strong>加密&#x3D;&gt; m^e≡c (mod n)</strong><br><strong>解密&#x3D;&gt; c^d ≡m (mod n)</strong></p>
+<p>模攻击<br>共模是指：就是明文m,相同。用两个公钥e1,e2加密得到两个私钥d1,d2 和两个密文c1,c2<br>共模攻击，即当m不变的情况下，知道n,e1,e2,c1,c2, 可以在不知道d1,d2的情况下，解出m<br>利用条件为&#x3D;&gt; gcd(e1,e2)&#x3D;1</p>
+<p>根据扩展欧几里得 算法得<br>可以得到该式子的一组解(s1,s2) 假设s1为正数，s2为负数<br>有整数s1,s2(一正一负)<br>存在e1<em>s1+e2</em>s2&#x3D;&#x3D;1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">因为gcd(e1,e2)=1</span><br><span class="line">根据扩展欧几里得得到 e1*s1+e2*s2=1    s1,s2中一正一负，设s1为正，s2为负</span><br><span class="line">c1 = m^e1%n   c2 = m^e2%n</span><br><span class="line">(c1^s1)*(c2^s2)%n=((m^e1%n)^s1*(m^e2%n)^s2)%n</span><br><span class="line">=&gt;(c1^s1)*(c2^s2)%n=((m^e1)^s1*(m^e2)^s2)%n       #(a*b)%n=(a%n*b%n)%n</span><br><span class="line">=&gt;(c1^s1)*(c2^s2)%n=(m^(e1^s1+e2^s2))%n              #同底数幂</span><br><span class="line">=&gt;(c1^s1)*(c2^s2)%n=(m^(1))%n    e1*s1+e2*s2=1     </span><br><span class="line">=&gt;(c1^s1)*(c2^s2)%n=m%n</span><br><span class="line">=&gt;(c1^s1)*(c2^s2)=m</span><br><span class="line">可得m=(c1^s1)*(c2^s2)%n</span><br><span class="line"></span><br><span class="line">gcd(e1,e2)=1</span><br><span class="line">e1*s1+e2*s2=1</span><br><span class="line">m</span><br><span class="line">=&gt;m^1</span><br><span class="line">=&gt;m(e1*s1+e2*s2)</span><br><span class="line">=&gt;((m^e1)^s1*(m^e2)^s2)</span><br><span class="line">=&gt;(c1^s1)*(c2^s2)</span><br><span class="line"></span><br><span class="line">根据模运算性质</span><br><span class="line">(a*b)%n=(a%n*b%n)%n</span><br></pre></td></tr></table></figure>
+
+<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><p>所以本题的攻击脚本（3）为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#task3</span><br><span class="line">n4 = 18819509188106230363444813350468162056164434642729404632983082518225388069544777374544142317612858448345344137372222988033366528086236635213756227816610865045924357232188768913642158448603346330462535696121739622702200540344105464126695432011739181531217582949804939555720700457350512898322376591813135311921904580338340203569582681889243452495363849558955947124975293736509426400460083981078846138740050634906824438689712748324336878791622676974341814691041262280604277357889892211717124319329666052810029131172229930723477981468761369516771720250571713027972064974999802168017946274736383148001865929719248159075729</span><br><span class="line">e3 = 2519901323</span><br><span class="line">c4 = 3230779726225544872531441169009307072073754578761888387983403206364548451496736513905460381907928107310030086346589351105809028599650303539607581407627819797944337398601400510560992462455048451326593993595089800150342999021874734748066692962362650540036002073748766509347649818139304363914083879918929873577706323599628031618641793074018304521243460487551364823299685052518852685706687800209505277426869140051056996242882132616256695188870782634310362973153766698286258946896866396670872451803114280846709572779780558482223393759475999103607704510618332253710503857561025613632592682931552228150171423846203875344870</span><br><span class="line">e4 = 3676335737</span><br><span class="line">c5 = 940818595622279161439836719641707846790294650888799822335007385854166736459283129434769062995122371073636785371800857633841379139761091890426137981113087519934854663776695944489430385663011713917022574342380155718317794204988626116362865144125136624722782309455452257758808172415884403909840651554485364309237853885251876941477098008690389600544398998669635962495989736021020715396415375890720335697504837045188626103142204474942751410819466379437091569610294575687793060945525108986660851277475079994466474859114092643797418927645726430175928247476884879817034346652560116597965191204061051401916282814886688467861</span><br><span class="line"># 扩展欧几里得算法求出s1,s2的值，满足e1*s1 + e2*s2 = 1</span><br><span class="line">_,s1,s2 = gcdext(e3,e4)</span><br><span class="line">m3 = pow(c4,s1,n4) * pow(c5,s2,n4) % n4</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/03/17/CTF-Crypto-1/" data-id="cltuzb1ef0000dguo7uyl2kqo" data-title="CTF-Crypto-1" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2024/03/01/RCE/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">RCE</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/03/17/CTF-Crypto-1/">CTF-Crypto-1</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/01/RCE/">RCE</a>
+          </li>
+        
+          <li>
+            <a href="/2024/02/29/ctf-php-3/">ctf-php-3</a>
+          </li>
+        
+          <li>
+            <a href="/2024/02/29/CTF-php-0/">CTF-php</a>
+          </li>
+        
+          <li>
+            <a href="/2024/02/28/ctf-php/">ctf-php</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
