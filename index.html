@@ -73,6 +73,65 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-CTF-crypto-2" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/03/19/CTF-crypto-2/" class="article-date">
+  <time class="dt-published" datetime="2024-03-19T15:13:37.000Z" itemprop="datePublished">2024-03-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/03/19/CTF-crypto-2/">CTF-crypto-2</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Crypto-中国剩余定理-广播攻击"><a href="#Crypto-中国剩余定理-广播攻击" class="headerlink" title="Crypto-中国剩余定理-广播攻击"></a>Crypto-中国剩余定理-广播攻击</h1><p>今天看了一道题目：<a target="_blank" rel="noopener" href="https://www.nssctf.cn/problem/452">https://www.nssctf.cn/problem/452</a></p>
+<p>[鹤城杯 2021]Crazy_Rsa_Tech</p>
+<p><strong>题目chall.py</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">from Crypto.Util.number import *</span><br><span class="line">from Crypto.Util.Padding import *</span><br><span class="line"></span><br><span class="line">FLAG = bytes_to_long(pad(b&quot;flag&#123;??????&#125;&quot;,64))</span><br><span class="line">def init_key():</span><br><span class="line">    p, q = getPrime(512), getPrime(512)</span><br><span class="line">    n = p*q</span><br><span class="line">    e = 9</span><br><span class="line">    while(GCD((p-1)*(q-1),e)!=1):</span><br><span class="line">        p, q = getPrime(512), getPrime(512)</span><br><span class="line">        n = p*q</span><br><span class="line">    d = inverse(e,(p-1)*(q-1))</span><br><span class="line">    return n,e,d</span><br><span class="line"></span><br><span class="line">n_list=list()</span><br><span class="line">c_list=list()</span><br><span class="line">for i in range(9):</span><br><span class="line">    N,e,d=init_key()</span><br><span class="line">    n_list.append(N)</span><br><span class="line">    c=pow(FLAG,e,N)</span><br><span class="line">    c_list.append(pow(FLAG,e,N))</span><br><span class="line">    assert(pow(c,d,N)==FLAG)</span><br><span class="line">print(&quot;n_list:&quot;,n_list)</span><br><span class="line">print(&quot;c_list:&quot;,c_list)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>题目的txt文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">n_list: [71189786319102608575263218254922479901008514616376166401353025325668690465852130559783959409002115897148828732231478529655075366072137059589917001875303598680931962384468363842379833044123189276199264340224973914079447846845897807085694711541719515881377391200011269924562049643835131619086349617062034608799, 92503831027754984321994282254005318198418454777812045042619263533423066848097985191386666241913483806726751133691867010696758828674382946375162423033994046273252417389169779506788545647848951018539441971140081528915876529645525880324658212147388232683347292192795975558548712504744297104487514691170935149949, 100993952830138414466948640139083231443558390127247779484027818354177479632421980458019929149817002579508423291678953554090956334137167905685261724759487245658147039684536216616744746196651390112540237050493468689520465897258378216693418610879245129435268327315158194612110422630337395790254881602124839071919, 59138293747457431012165762343997972673625934330232909935732464725128776212729547237438509546925172847581735769773563840639187946741161318153031173864953372796950422229629824699580131369991913883136821374596762214064774480548532035315344368010507644630655604478651898097886873485265848973185431559958627423847, 66827868958054485359731420968595906328820823695638132426084478524423658597714990545142120448668257273436546456116147999073797943388584861050133103137697812149742551913704341990467090049650721713913812069904136198912314243175309387952328961054617877059134151915723594900209641163321839502908705301293546584147, 120940513339890268554625391482989102665030083707530690312336379356969219966820079510946652021721814016286307318930536030308296265425674637215009052078834615196224917417698019787514831973471113022781129000531459800329018133248426080717653298100515701379374786486337920294380753805825328119757649844054966712377, 72186594495190221129349814154999705524005203343018940547856004977368023856950836974465616291478257156860734574686154136925776069045232149725101769594505766718123155028300703627531567850035682448632166309129911061492630709698934310123778699316856399909549674138453085885820110724923723830686564968967391721281, 69105037583161467265649176715175579387938714721653281201847973223975467813529036844308693237404592381480367515044829190066606146105800243199497182114398931410844901178842049915914390117503986044951461783780327749665912369177733246873697481544777183820939967036346862056795919812693669387731294595126647751951, 76194219445824867986050004226602973283400885106636660263597964027139613163638212828932901192009131346530898961165310615466747046710743013409318156266326090650584190382130795884514074647833949281109675170830565650006906028402714868781834693473191228256626654011772428115359653448111208831188721505467497494581]</span><br><span class="line">c_list: [62580922178008480377006528793506649089253164524883696044759651305970802215270721223149734532870729533611357047595181907404222690394917605617029675103788705320032707977225447998111744887898039756375876685711148857676502670812333076878964148863713993853526715855758799502735753454247721711366497722251078739585, 46186240819076690248235492196228128599822002268014359444368898414937734806009161030424589993541799877081745454934484263188270879142125136786221625234555265815513136730416539407710862948861531339065039071959576035606192732936477944770308784472646015244527805057990939765708793705044236665364664490419874206900, 85756449024868529058704599481168414715291172247059370174556127800630896693021701121075838517372920466708826412897794900729896389468152213884232173410022054605870785910461728567377769960823103334874807744107855490558726013068890632637193410610478514663078901021307258078678427928255699031215654693270240640198, 14388767329946097216670270960679686032536707277732968784379505904021622612991917314721678940833050736745004078559116326396233622519356703639737886289595860359630019239654690312132039876082685046329079266785042428947147658321799501605837784127004536996628492065409017175037161261039765340032473048737319069656, 1143736792108232890306863524988028098730927600066491485326214420279375304665896453544100447027809433141790331191324806205845009336228331138326163746853197990596700523328423791764843694671580875538251166864957646807184041817863314204516355683663859246677105132100377322669627893863885482167305919925159944839, 2978800921927631161807562509445310353414810029862911925227583943849942080514132963605492727604495513988707849133045851539412276254555228149742924149242124724864770049898278052042163392380895275970574317984638058768854065506927848951716677514095183559625442889028813635385408810698294574175092159389388091981, 16200944263352278316040095503540249310705602580329203494665614035841657418101517016718103326928336623132935178377208651067093136976383774189554806135146237406248538919915426183225265103769259990252162411307338473817114996409705345401251435268136647166395894099897737607312110866874944619080871831772376466376, 31551601425575677138046998360378916515711528548963089502535903329268089950335615563205720969393649713416910860593823506545030969355111753902391336139384464585775439245735448030993755229554555004154084649002801255396359097917380427525820249562148313977941413268787799534165652742114031759562268691233834820996, 25288164985739570635307839193110091356864302148147148153228604718807817833935053919412276187989509493755136905193728864674684139319708358686431424793278248263545370628718355096523088238513079652226028236137381367215156975121794485995030822902933639803569133458328681148758392333073624280222354763268512333515]</span><br></pre></td></tr></table></figure>
+
+<p>看到这就知道是广播攻击了</p>
+<p>我们看e，很小，说明是低加密指数攻击，主要的形式就是：<strong>1.e很小2.用相同的e给若干个接受者发送相同的信息。</strong></p>
+<p>我们再看代码。</p>
+<p>这段 Python 代码生成了 9 组 RSA 密钥对，并对一个预设的 FLAG 进行加密。以下是对代码的解释：</p>
+<p>1.首先，代码导入了 Crypto.Util.number 和 Crypto.Util.Padding 模块，用于处理大数和填充操作。<br>2.FLAG 是一个待加密的字符串，使用 bytes_to_long 将其转换为一个大整数，并使用 pad 函数将其填充至 64 字节的长度。<br>3.init_key 函数用于生成 RSA 密钥对。它首先生成两个 512 位的素数 p 和 q，然后计算出 n，即两个素数的乘积。接下来，选择 e&#x3D;9 作为公钥指数。循环选择 p 和 q，直到 (p-1)<em>(q-1) 与 e 互质。最后，使用 inverse 函数计算私钥指数 d，其满足 e</em>d ≡ 1 (mod (p-1)*(q-1))。<br>4.接下来使用一个循环来生成 9 组密钥对。每生成一组密钥对，将 n 添加到 n_list 列表中。使用公钥加密 FLAG 得到密文 c，并将 c 添加到 c_list 列表中。最后，使用 assert 语句确保对密文进行解密后得到的明文与 FLAG 一致。<br>5.最后，打印输出 n_list 和 c_list。</p>
+<p>这段代码的目的是生成多组 RSA 密钥对，并将它们打印出来。其中每组密钥对的 n 用于加密，c 是对 FLAG 进行加密后的密文。</p>
+<p>查了发现是中国剩余定理</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">中国剩余定理（Chinese Remainder Theorem, CRT）是一种重要的数论定理，用于求解同余方程组。它可以高效地求解多个模数不同的同余方程，并得到其唯一解。中国剩余定理由中国古代数学家孙子提出，后来由中国数学家陈景润在数学上进行了详细的证明和推广。</span><br><span class="line">假设我们有一组模数（可以是正整数） n1, n2, ..., nk，对应的余数分别为 a1, a2, ..., ak。中国剩余定理告诉我们，如果这些模数两两互素（即任意两个模数之间的最大公约数为 1），那么这组同余方程：</span><br><span class="line">x ≡ a1 (mod n1)</span><br><span class="line">x ≡ a2 (mod n2)</span><br><span class="line">...</span><br><span class="line">x ≡ ak (mod nk)</span><br><span class="line"></span><br><span class="line">一定有唯一解 x，且满足 0 ≤ x &amp;lt; n1 * n2 * ... * nk。</span><br><span class="line">中国剩余定理的求解步骤如下：</span><br><span class="line"></span><br><span class="line">1.计算 N：将所有模数相乘，即 N = n1 * n2 * ... * nk。</span><br><span class="line">2.对于每个 i，计算 Ni：Ni = N / ni，即将 N 除以对应的模数 ni。</span><br><span class="line">3.对于每个 i，计算 Mi：Mi 是 ni 对 Ni 模运算的乘法反元素，即满足 Mi * Ni ≡ 1 (mod ni)。</span><br><span class="line">4.计算解 x：x = (Σ(ai * Ni * Mi)) mod N，即将每个同余方程的解与 Ni * Mi 的乘积相加，并对 N 求模。</span><br><span class="line"></span><br><span class="line">最终得到的解 x 是同余方程组的唯一解，并且位于 0 到 N-1 的范围内。</span><br><span class="line">中国剩余定理的应用十分广泛，特别在密码学和计算机科学领域中的算法设计中经常使用。它提供了一种高效求解同余方程组的方法，通过对多个同余方程进行分解和合并，大大减少了计算的复杂性。</span><br><span class="line">希望以上对中国剩余定理的解释能够帮助你理解其原理和应用。如果还有其他问题，请随时提问。</span><br></pre></td></tr></table></figure>
+
+<p>根据求解步骤写脚本，本题关键是，根据定理，我们想到n1到k的的积，然后再求出每个模数</p>
+<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">from Crypto.Util.number import *</span><br><span class="line">from gmpy2 import *</span><br><span class="line">n_list = [</span><br><span class="line">   71189786319102608575263218254922479901008514616376166401353025325668690465852130559783959409002115897148828732231478529655075366072137059589917001875303598680931962384468363842379833044123189276199264340224973914079447846845897807085694711541719515881377391200011269924562049643835131619086349617062034608799,</span><br><span class="line">   92503831027754984321994282254005318198418454777812045042619263533423066848097985191386666241913483806726751133691867010696758828674382946375162423033994046273252417389169779506788545647848951018539441971140081528915876529645525880324658212147388232683347292192795975558548712504744297104487514691170935149949,</span><br><span class="line">   100993952830138414466948640139083231443558390127247779484027818354177479632421980458019929149817002579508423291678953554090956334137167905685261724759487245658147039684536216616744746196651390112540237050493468689520465897258378216693418610879245129435268327315158194612110422630337395790254881602124839071919,</span><br><span class="line">   59138293747457431012165762343997972673625934330232909935732464725128776212729547237438509546925172847581735769773563840639187946741161318153031173864953372796950422229629824699580131369991913883136821374596762214064774480548532035315344368010507644630655604478651898097886873485265848973185431559958627423847,</span><br><span class="line">   66827868958054485359731420968595906328820823695638132426084478524423658597714990545142120448668257273436546456116147999073797943388584861050133103137697812149742551913704341990467090049650721713913812069904136198912314243175309387952328961054617877059134151915723594900209641163321839502908705301293546584147,</span><br><span class="line">   120940513339890268554625391482989102665030083707530690312336379356969219966820079510946652021721814016286307318930536030308296265425674637215009052078834615196224917417698019787514831973471113022781129000531459800329018133248426080717653298100515701379374786486337920294380753805825328119757649844054966712377,</span><br><span class="line">   72186594495190221129349814154999705524005203343018940547856004977368023856950836974465616291478257156860734574686154136925776069045232149725101769594505766718123155028300703627531567850035682448632166309129911061492630709698934310123778699316856399909549674138453085885820110724923723830686564968967391721281,</span><br><span class="line">   69105037583161467265649176715175579387938714721653281201847973223975467813529036844308693237404592381480367515044829190066606146105800243199497182114398931410844901178842049915914390117503986044951461783780327749665912369177733246873697481544777183820939967036346862056795919812693669387731294595126647751951,</span><br><span class="line">   76194219445824867986050004226602973283400885106636660263597964027139613163638212828932901192009131346530898961165310615466747046710743013409318156266326090650584190382130795884514074647833949281109675170830565650006906028402714868781834693473191228256626654011772428115359653448111208831188721505467497494581]</span><br><span class="line">c_list = [</span><br><span class="line">   62580922178008480377006528793506649089253164524883696044759651305970802215270721223149734532870729533611357047595181907404222690394917605617029675103788705320032707977225447998111744887898039756375876685711148857676502670812333076878964148863713993853526715855758799502735753454247721711366497722251078739585,</span><br><span class="line">   46186240819076690248235492196228128599822002268014359444368898414937734806009161030424589993541799877081745454934484263188270879142125136786221625234555265815513136730416539407710862948861531339065039071959576035606192732936477944770308784472646015244527805057990939765708793705044236665364664490419874206900,</span><br><span class="line">   85756449024868529058704599481168414715291172247059370174556127800630896693021701121075838517372920466708826412897794900729896389468152213884232173410022054605870785910461728567377769960823103334874807744107855490558726013068890632637193410610478514663078901021307258078678427928255699031215654693270240640198,</span><br><span class="line">   14388767329946097216670270960679686032536707277732968784379505904021622612991917314721678940833050736745004078559116326396233622519356703639737886289595860359630019239654690312132039876082685046329079266785042428947147658321799501605837784127004536996628492065409017175037161261039765340032473048737319069656,</span><br><span class="line">   1143736792108232890306863524988028098730927600066491485326214420279375304665896453544100447027809433141790331191324806205845009336228331138326163746853197990596700523328423791764843694671580875538251166864957646807184041817863314204516355683663859246677105132100377322669627893863885482167305919925159944839,</span><br><span class="line">   2978800921927631161807562509445310353414810029862911925227583943849942080514132963605492727604495513988707849133045851539412276254555228149742924149242124724864770049898278052042163392380895275970574317984638058768854065506927848951716677514095183559625442889028813635385408810698294574175092159389388091981,</span><br><span class="line">   16200944263352278316040095503540249310705602580329203494665614035841657418101517016718103326928336623132935178377208651067093136976383774189554806135146237406248538919915426183225265103769259990252162411307338473817114996409705345401251435268136647166395894099897737607312110866874944619080871831772376466376,</span><br><span class="line">   31551601425575677138046998360378916515711528548963089502535903329268089950335615563205720969393649713416910860593823506545030969355111753902391336139384464585775439245735448030993755229554555004154084649002801255396359097917380427525820249562148313977941413268787799534165652742114031759562268691233834820996,</span><br><span class="line">   25288164985739570635307839193110091356864302148147148153228604718807817833935053919412276187989509493755136905193728864674684139319708358686431424793278248263545370628718355096523088238513079652226028236137381367215156975121794485995030822902933639803569133458328681148758392333073624280222354763268512333515]</span><br><span class="line">n = 1</span><br><span class="line">for i in n_list:</span><br><span class="line">   n = n * i  //1.计算 N：将所有模数相乘，即 N = n1 * n2 * ... * nk。</span><br><span class="line"></span><br><span class="line">n_ = []</span><br><span class="line">for i in n_list:</span><br><span class="line">   n_.append(n // i)  //2.对于每个 i，计算 Ni：Ni = N / ni，即将 N 除以对应的模数 ni。</span><br><span class="line"></span><br><span class="line">t = []</span><br><span class="line">for i in range(9):</span><br><span class="line">   t.append(inverse(n_[i], n_list[i])) //3.对于每个 i，计算 Mi：Mi 是 ni 对 Ni 模运算的乘法反元素，即满足 Mi * Ni ≡                                                                                                 1 (mod ni)。</span><br><span class="line"></span><br><span class="line">x = 0</span><br><span class="line">for i in range(len(n_list)):</span><br><span class="line">   x = c_list[i] * n_[i] * t[i] + x  //4.计算解 x：x = (Σ(ai * Ni * Mi)) mod N，即将每个同余方程的解与 Ni * Mi 的                                                                                         乘积相加，并对 N 求模。</span><br><span class="line">x = x % n</span><br><span class="line">print(x)</span><br><span class="line">x = iroot(x, 9)[0]</span><br><span class="line">print(long_to_bytes(x))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>吾将上下而求索</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/03/19/CTF-crypto-2/" data-id="cltyj8vvp0000mguo1tjhbvzp" data-title="CTF-crypto-2" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-CTF-Crypto-1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/03/17/CTF-Crypto-1/" class="article-date">
@@ -647,116 +706,6 @@
 
 
   
-    <article id="computer-Compuer-science" class="h-entry article article-type-computer" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/11/02/Compuer-science/" class="article-date">
-  <time class="dt-published" datetime="2023-11-02T08:57:54.000Z" itemprop="datePublished">2023-11-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2023/11/02/Compuer-science/">science</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="Compuer-science"><a href="#Compuer-science" class="headerlink" title="Compuer science"></a>Compuer science</h1><h2 id="C语言程序设计："><a href="#C语言程序设计：" class="headerlink" title="C语言程序设计："></a>C语言程序设计：</h2><h3 id="static的性质"><a href="#static的性质" class="headerlink" title="static的性质"></a>static的性质</h3><p>各位uu们大家好，今天我分享一下作为初学者对static在C语言程序设计中的几点看法</p>
-<p>首先给大家介绍一下两个概念，作用域和生命周期：</p>
-<ul>
-<li><p>作用域  ：一段程序代码中的名字不总是有效的，而限定这个名字的可用性时这个名字的作用域</p>
-<ul>
-<li>局部变量的作用域时变量所在的局部范围</li>
-<li>全局变量的作用域是整个工程</li>
-</ul>
-</li>
-<li><p>生命周期：指变量的创建到变量的销毁之间的一个时间段</p>
-<ul>
-<li>局部变量的生命周期是：进入局部变量创建，生命周期开始，出作用域生命周期结束</li>
-<li>全局变量的生命周期是：整个程序的生命周期</li>
-</ul>
-</li>
-</ul>
-<p>下面看我演示</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">int</span> a=<span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    printf(<span class="string">&quot;%d&quot;</span>,a);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>变量a打印不出结果，因为a的作用域在花括号内，出了作用域a被销毁。</p>
-<p>而static的作用是改变变量的生命周期（不改变作用域）</p>
-<ul>
-<li>先说一下static的性质（面试爱考（狗头））<ul>
-<li>修饰全局变量</li>
-<li>修饰局部变量</li>
-<li>修饰函数</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> a =<span class="number">1</span>;</span><br><span class="line">    a++;</span><br><span class="line">    printf(<span class="string">&quot;%d &quot;</span>,a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">int</span> a =<span class="number">1</span>;</span><br><span class="line">    a++;</span><br><span class="line">    printf(<span class="string">&quot;%d &quot;</span>,a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>前一个程序输出的结果是 2 2 2 2 2</p>
-<p>后一个程序输出的结果是 2 3 4 5 6</p>
-<p>因为前一个程序中a每次运行完就销毁了，后一个程序中的a在每次循环中没有被销毁。static改变的了a的生命周期</p>
-<p>本质上，static改变了变量的存储类型</p>
-<table>
-<thead>
-<tr>
-<th>栈区</th>
-<th>栈区的变量特点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>局部变量、形式参数，临时变量</td>
-<td>都是临时的，进入作用域创建，出作用域销毁</td>
-</tr>
-<tr>
-<td><strong>堆区</strong></td>
-<td></td>
-</tr>
-<tr>
-<td>malloc,calloc,realloc,free</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>静态区</strong></td>
-<td><strong>静态区的变量特点</strong></td>
-</tr>
-<tr>
-<td>全局变量，静态变量-被static修饰的变量</td>
-<td>生命周期比较长，和程序的生命周期一样</td>
-</tr>
-</tbody></table>
-<p>一个变量是存在栈区的，但是被static修饰后就存在静态区了，因为存储类型的变化，生命周期跟着变化了，变长了。</p>
-<p>OK！今天的讨论到此结束。</p>
-<h2 id="作者介绍："><a href="#作者介绍：" class="headerlink" title="作者介绍："></a>作者介绍：</h2><ul>
-<li>FAFU计算机与信息学院23级新生Lin</li>
-<li>福建南平建阳人</li>
-<li>偶像是昊杨、江峣哥哥们</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/11/02/Compuer-science/" data-id="clrz6k5n60000mkuoag8f3rtr" data-title="science" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -793,6 +742,10 @@
       <ul>
         
           <li>
+            <a href="/2024/03/19/CTF-crypto-2/">CTF-crypto-2</a>
+          </li>
+        
+          <li>
             <a href="/2024/03/17/CTF-Crypto-1/">CTF-Crypto-1</a>
           </li>
         
@@ -806,10 +759,6 @@
         
           <li>
             <a href="/2024/02/29/CTF-php-0/">CTF-php</a>
-          </li>
-        
-          <li>
-            <a href="/2024/02/28/ctf-php/">ctf-php</a>
           </li>
         
       </ul>

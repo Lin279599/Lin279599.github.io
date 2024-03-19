@@ -73,6 +73,116 @@
       <div class="outer">
         <section id="main">
   
+    <article id="computer-Compuer-science" class="h-entry article article-type-computer" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/02/Compuer-science/" class="article-date">
+  <time class="dt-published" datetime="2023-11-02T08:57:54.000Z" itemprop="datePublished">2023-11-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/11/02/Compuer-science/">science</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Compuer-science"><a href="#Compuer-science" class="headerlink" title="Compuer science"></a>Compuer science</h1><h2 id="C语言程序设计："><a href="#C语言程序设计：" class="headerlink" title="C语言程序设计："></a>C语言程序设计：</h2><h3 id="static的性质"><a href="#static的性质" class="headerlink" title="static的性质"></a>static的性质</h3><p>各位uu们大家好，今天我分享一下作为初学者对static在C语言程序设计中的几点看法</p>
+<p>首先给大家介绍一下两个概念，作用域和生命周期：</p>
+<ul>
+<li><p>作用域  ：一段程序代码中的名字不总是有效的，而限定这个名字的可用性时这个名字的作用域</p>
+<ul>
+<li>局部变量的作用域时变量所在的局部范围</li>
+<li>全局变量的作用域是整个工程</li>
+</ul>
+</li>
+<li><p>生命周期：指变量的创建到变量的销毁之间的一个时间段</p>
+<ul>
+<li>局部变量的生命周期是：进入局部变量创建，生命周期开始，出作用域生命周期结束</li>
+<li>全局变量的生命周期是：整个程序的生命周期</li>
+</ul>
+</li>
+</ul>
+<p>下面看我演示</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">int</span> a=<span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    printf(<span class="string">&quot;%d&quot;</span>,a);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>变量a打印不出结果，因为a的作用域在花括号内，出了作用域a被销毁。</p>
+<p>而static的作用是改变变量的生命周期（不改变作用域）</p>
+<ul>
+<li>先说一下static的性质（面试爱考（狗头））<ul>
+<li>修饰全局变量</li>
+<li>修饰局部变量</li>
+<li>修饰函数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> a =<span class="number">1</span>;</span><br><span class="line">    a++;</span><br><span class="line">    printf(<span class="string">&quot;%d &quot;</span>,a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include&lt;stdio.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">int</span> a =<span class="number">1</span>;</span><br><span class="line">    a++;</span><br><span class="line">    printf(<span class="string">&quot;%d &quot;</span>,a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="built_in">int</span> <span class="title">main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>前一个程序输出的结果是 2 2 2 2 2</p>
+<p>后一个程序输出的结果是 2 3 4 5 6</p>
+<p>因为前一个程序中a每次运行完就销毁了，后一个程序中的a在每次循环中没有被销毁。static改变的了a的生命周期</p>
+<p>本质上，static改变了变量的存储类型</p>
+<table>
+<thead>
+<tr>
+<th>栈区</th>
+<th>栈区的变量特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>局部变量、形式参数，临时变量</td>
+<td>都是临时的，进入作用域创建，出作用域销毁</td>
+</tr>
+<tr>
+<td><strong>堆区</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>malloc,calloc,realloc,free</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>静态区</strong></td>
+<td><strong>静态区的变量特点</strong></td>
+</tr>
+<tr>
+<td>全局变量，静态变量-被static修饰的变量</td>
+<td>生命周期比较长，和程序的生命周期一样</td>
+</tr>
+</tbody></table>
+<p>一个变量是存在栈区的，但是被static修饰后就存在静态区了，因为存储类型的变化，生命周期跟着变化了，变长了。</p>
+<p>OK！今天的讨论到此结束。</p>
+<h2 id="作者介绍："><a href="#作者介绍：" class="headerlink" title="作者介绍："></a>作者介绍：</h2><ul>
+<li>FAFU计算机与信息学院23级新生Lin</li>
+<li>福建南平建阳人</li>
+<li>偶像是昊杨、江峣哥哥们</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/11/02/Compuer-science/" data-id="clrz6k5n60000mkuoag8f3rtr" data-title="science" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-Compuer science" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/11/02/Compuer%20science/" class="article-date">
@@ -298,6 +408,10 @@
       <ul>
         
           <li>
+            <a href="/2024/03/19/CTF-crypto-2/">CTF-crypto-2</a>
+          </li>
+        
+          <li>
             <a href="/2024/03/17/CTF-Crypto-1/">CTF-Crypto-1</a>
           </li>
         
@@ -311,10 +425,6 @@
         
           <li>
             <a href="/2024/02/29/CTF-php-0/">CTF-php</a>
-          </li>
-        
-          <li>
-            <a href="/2024/02/28/ctf-php/">ctf-php</a>
           </li>
         
       </ul>
