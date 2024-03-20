@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>CTF-Crypto-3 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Crypto-共享素数题目https:&#x2F;&#x2F;www.nssctf.cn&#x2F;problem&#x2F;227 [羊城杯 2021]Bigrsa 123456789101112131415from Crypto.Util.number import *from flag import *n1 &#x3D; 103835296409081751860770535514746586815395898427260334325680">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF-Crypto-3">
+<meta property="og:url" content="http://example.com/2024/03/20/CTF-Crypto-3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Crypto-共享素数题目https:&#x2F;&#x2F;www.nssctf.cn&#x2F;problem&#x2F;227 [羊城杯 2021]Bigrsa 123456789101112131415from Crypto.Util.number import *from flag import *n1 &#x3D; 103835296409081751860770535514746586815395898427260334325680">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-03-20T10:32:52.000Z">
+<meta property="article:modified_time" content="2024-03-20T10:39:09.299Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-CTF-Crypto-3" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/03/20/CTF-Crypto-3/" class="article-date">
+  <time class="dt-published" datetime="2024-03-20T10:32:52.000Z" itemprop="datePublished">2024-03-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      CTF-Crypto-3
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Crypto-共享素数"><a href="#Crypto-共享素数" class="headerlink" title="Crypto-共享素数"></a>Crypto-共享素数</h1><p>题目<a target="_blank" rel="noopener" href="https://www.nssctf.cn/problem/227">https://www.nssctf.cn/problem/227</a></p>
+<p>[羊城杯 2021]Bigrsa</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from Crypto.Util.number import *</span><br><span class="line">from flag import *</span><br><span class="line"></span><br><span class="line">n1 = 103835296409081751860770535514746586815395898427260334325680313648369132661057840680823295512236948953370895568419721331170834557812541468309298819497267746892814583806423027167382825479157951365823085639078738847647634406841331307035593810712914545347201619004253602692127370265833092082543067153606828049061</span><br><span class="line">n2 = 115383198584677147487556014336448310721853841168758012445634182814180314480501828927160071015197089456042472185850893847370481817325868824076245290735749717384769661698895000176441497242371873981353689607711146852891551491168528799814311992471449640014501858763495472267168224015665906627382490565507927272073</span><br><span class="line">e = 65537</span><br><span class="line">m = bytes_to_long(flag)</span><br><span class="line">c = pow(m, e, n1)</span><br><span class="line">c = pow(c, e, n2)</span><br><span class="line"></span><br><span class="line">print(&quot;c = %d&quot; % c)</span><br><span class="line"></span><br><span class="line"># output</span><br><span class="line"># c = 60406168302768860804211220055708551816238816061772464557956985699400782163597251861675967909246187833328847989530950308053492202064477410641014045601986036822451416365957817685047102703301347664879870026582087365822433436251615243854347490600004857861059245403674349457345319269266645006969222744554974358264</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>看代码，发现c运算了两次</p>
+<p>共享素数是指RSA加密时进行了两次加密，并且给出了加密钥e，两次加密的n1和n2，密文c。</p>
+<p>题目中对明文进行了两次的加密，分别使用两次的n，要通过密文解出明文m，那么就得知道两次加密的解密钥d，要求出解密钥d就得需要知道p，q通过求逆元的方法求出d。但是n1和n2的值非常大，通过爆破求因式分解显示不太可能。因此可以看看两个n之间是否存在共用的素数。</p>
+<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from Crypto.Util.number import *</span><br><span class="line">from gmpy2 import powmod as po, gmpy2</span><br><span class="line">import sympy</span><br><span class="line"> </span><br><span class="line">c = 60406168302768860804211220055708551816238816061772464557956985699400782163597251861675967909246187833328847989530950308053492202064477410641014045601986036822451416365957817685047102703301347664879870026582087365822433436251615243854347490600004857861059245403674349457345319269266645006969222744554974358264</span><br><span class="line">n1 = 103835296409081751860770535514746586815395898427260334325680313648369132661057840680823295512236948953370895568419721331170834557812541468309298819497267746892814583806423027167382825479157951365823085639078738847647634406841331307035593810712914545347201619004253602692127370265833092082543067153606828049061</span><br><span class="line">n2 = 115383198584677147487556014336448310721853841168758012445634182814180314480501828927160071015197089456042472185850893847370481817325868824076245290735749717384769661698895000176441497242371873981353689607711146852891551491168528799814311992471449640014501858763495472267168224015665906627382490565507927272073</span><br><span class="line">e = 65537</span><br><span class="line">q = gmpy2.gcd(n1, n2)  # 求n1和n2的最大公因数</span><br><span class="line">p1 = n1 // q</span><br><span class="line">p2 = n2 // q</span><br><span class="line">fn1 = (q - 1) * (p1 - 1)  # 求下面的&amp;n</span><br><span class="line">fn2 = (q - 1) * (p2 - 1)  # 求上面的&amp;n</span><br><span class="line">d1 = inverse(e, fn1)  # (de)mod((p-1)*(q-1))=1  求到第一次解密密钥d1</span><br><span class="line">d2 = inverse(e, fn2)  # 求出第二次解密密钥d2</span><br><span class="line">m = pow(c, d2, n2)  # 先对第二次加密进行解密</span><br><span class="line">m = pow(m, d1, n1)  # 用第二次解密结果继续解密</span><br><span class="line">print(long_to_bytes(m))</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_53090346/article/details/125168311">https://blog.csdn.net/weixin_53090346/article/details/125168311</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/03/20/CTF-Crypto-3/" data-id="cltzo8o730000bsuo1s3ja9ag" data-title="CTF-Crypto-3" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2024/03/19/CTF-crypto-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CTF-crypto-2</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/03/20/CTF-Crypto-3/">CTF-Crypto-3</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/19/CTF-crypto-2/">CTF-crypto-2</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/17/CTF-Crypto-1/">CTF-Crypto-1</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/01/RCE/">RCE</a>
+          </li>
+        
+          <li>
+            <a href="/2024/02/29/ctf-php-3/">ctf-php-3</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
