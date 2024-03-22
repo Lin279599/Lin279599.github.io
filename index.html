@@ -73,6 +73,70 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-CTF-Crypto-4" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/03/22/CTF-Crypto-4/" class="article-date">
+  <time class="dt-published" datetime="2024-03-22T11:20:13.000Z" itemprop="datePublished">2024-03-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/03/22/CTF-Crypto-4/">CTF-Crypto-4</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="CopperSmith攻击—鹤城杯"><a href="#CopperSmith攻击—鹤城杯" class="headerlink" title="CopperSmith攻击—鹤城杯"></a>CopperSmith攻击—鹤城杯</h1><p>题目链接：<a target="_blank" rel="noopener" href="https://www.nssctf.cn/problem/451">https://www.nssctf.cn/problem/451</a></p>
+<p>今天碰到这样一题，没见过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from Crypto.Util.number import getPrime, bytes_to_long</span><br><span class="line">from secret import flag</span><br><span class="line"></span><br><span class="line">p = getPrime(1024)</span><br><span class="line">q = getPrime(1024)</span><br><span class="line">n = p * q</span><br><span class="line">e = 65537</span><br><span class="line">hint1 = p &gt;&gt; 724</span><br><span class="line">hint2 = q % (2 ** 265)</span><br><span class="line">ct = pow(bytes_to_long(flag), e, n)</span><br><span class="line">print(hint1)</span><br><span class="line">print(hint2)</span><br><span class="line">print(n)</span><br><span class="line">print(ct)</span><br></pre></td></tr></table></figure>
+
+<p>这题有个hint1和hint2，它们分别有位移操作和取模操作，之前没有见过，查了发现是CopperSmith攻击</p>
+<p>在给定的代码中，<code>hint1</code> 是通过右移操作 <code>(p &gt;&gt; 724)</code> 得到的，它表示将 <code>p</code> 向右移动 724 位，取得 <code>p</code> 的高300位。</p>
+<p>同样地，<code>hint2</code> 是通过取模运算 <code>(q % (2 ** 265))</code> 得到的，它表示将 <code>q</code> 对 <code>(2 ** 265)</code> 取模，取得 <code>q</code> 的低265位。</p>
+<p>hint1就是p的高300位，hint2就是q的低位，想到高位攻击，可是高位攻击一般需要其中一个因子已知的570位，根据q的低位求出p的低位，再爆破点比特位就行了</p>
+<p>我们需要理解如何通过hint去求p和q<br>$$<br>q0&#x3D;q mod 2**265<br>$$</p>
+<p>$$<br>q&#x3D;q0+(2**265)*k<br>$$</p>
+<p>$$<br>n&#x3D;q0p+(2**265)<em>k</em>p<br>$$</p>
+<p>$$<br>n((q0)<strong>-1)&#x3D;p+(2</strong>265)<em>k</em>p*((q0)**-1)<br>$$</p>
+<p>$$<br>p0&#x3D;n((q0)<strong>-1)mod(2</strong>265)<br>$$</p>
+<p>所以我们求p0语句是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p0= n*inverse_mod(hint2, mod_num) % mod_num</span><br></pre></td></tr></table></figure>
+
+<p>当使用 Coppersmith 方法进行解密时，通常是针对 RSA 加密算法中的模数 N 和公钥 e 进行解密操作。下面是一个简单的示例，展示了基于 Coppersmith 的 RSA 解密的步骤及相关代码。</p>
+<p>解题步骤：</p>
+<p>步骤 1: 确保指数 e 较小</p>
+<p>在使用 Coppersmith 方法进行解密之前，需要确保 RSA 公钥的指数 e 相对较小。如果指数 e 很大，可能不适合直接使用 Coppersmith 方法进行解密。所以，我们可以尝试通过分解 N 来获得合适的指数 e 值。</p>
+<p>步骤 2: 构造多项式</p>
+<p>在得到 p 和 q 后，将其应用于多项式的构造中。多项式的构造依赖于具体的解密目标和加密算法的实现方式。以下代码展示了一个简单的例子，假设我们的目标是恢复 RSA 私钥的最低 b 位。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">b = &lt;私钥最低位的长度&gt;</span><br><span class="line">N = &lt;RSA 模数&gt;</span><br><span class="line"></span><br><span class="line">x = PolynomialRing(Zmod(N), &#x27;x&#x27;).gen()</span><br><span class="line"></span><br><span class="line"># 构造多项式 f(x)</span><br><span class="line">f = x^b - N</span><br><span class="line"></span><br><span class="line"># 将多项式转换为首一形式</span><br><span class="line">f_monic = f.monic()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">from gmpy2 import invert</span><br><span class="line">from Crypto.Util.number import long_to_bytes</span><br><span class="line"></span><br><span class="line">hint1 = 1514296530850131082973956029074258536069144071110652176122006763622293335057110441067910479</span><br><span class="line">hint2 = 40812438243894343296354573724131194431453023461572200856406939246297219541329623</span><br><span class="line">n = 21815431662065695412834116602474344081782093119269423403335882867255834302242945742413692949886248581138784199165404321893594820375775454774521554409598568793217997859258282700084148322905405227238617443766062207618899209593375881728671746850745598576485323702483634599597393910908142659231071532803602701147251570567032402848145462183405098097523810358199597631612616833723150146418889589492395974359466777040500971885443881359700735149623177757865032984744576285054725506299888069904106805731600019058631951255795316571242969336763938805465676269140733371287244624066632153110685509892188900004952700111937292221969</span><br><span class="line">e = 65537</span><br><span class="line">ct = 19073695285772829730103928222962723784199491145730661021332365516942301513989932980896145664842527253998170902799883262567366661277268801440634319694884564820420852947935710798269700777126717746701065483129644585829522353341718916661536894041337878440111845645200627940640539279744348235772441988748977191513786620459922039153862250137904894008551515928486867493608757307981955335488977402307933930592035163126858060189156114410872337004784951228340994743202032248681976932591575016798640429231399974090325134545852080425047146251781339862753527319093938929691759486362536986249207187765947926921267520150073408188188</span><br><span class="line"></span><br><span class="line">mod_num = 2**265</span><br><span class="line">ph = hint1 &lt;&lt; 724</span><br><span class="line">p0= n*inverse_mod(hint2, mod_num) % mod_num</span><br><span class="line">pbar = ph + p0</span><br><span class="line">print(&quot;pbar=&quot;,pbar)</span><br><span class="line">PR.&lt;x&gt;=PolynomialRing(Zmod(n))</span><br><span class="line">for i in range(64):</span><br><span class="line">    f = pbar + x*64*mod_num + i*mod_num                # 构造多项式</span><br><span class="line">    f = f.monic()                                      # 将多项式转换为首一形式</span><br><span class="line">    pm = f.small_roots(X=2^453,beta=0.4)               #求解</span><br><span class="line">    if pm:</span><br><span class="line">        print(&quot;pm[0]=&quot;,pm[0])</span><br><span class="line">        print(&quot;i=&quot;,i)</span><br><span class="line">        break</span><br><span class="line"></span><br><span class="line">p = int(pbar + pm[0]*64*mod_num + i*mod_num)           #RSA步骤</span><br><span class="line">print(&quot;p=&quot;,p)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_flag(p, q, n, e, c):</span><br><span class="line">    return long_to_bytes(pow(c, invert(e, (p - 1) * (q - 1)), n))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p = 133637329398256221348922087205912367118213472434713498908220867690672019569057789598459580146410501473689139466275052698529257254973211963162087316149628000798221014338373126500646873612341158676084318494058522014519669302359038980726479317742766438142835169562422371156257894374341629012755597863752154328407</span><br><span class="line">q = n // p</span><br><span class="line">print(&quot;flag:&quot;, get_flag(p, q, n, e, ct))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/03/22/CTF-Crypto-4/" data-id="clu2lo63b0000jguo59ur74us" data-title="CTF-Crypto-4" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-CTF-Crypto-3" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/03/20/CTF-Crypto-3/" class="article-date">
@@ -616,106 +680,6 @@
 
 
   
-    <article id="post-Computer-science-2" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/11/12/Computer-science-2/" class="article-date">
-  <time class="dt-published" datetime="2023-11-12T10:57:27.000Z" itemprop="datePublished">2023-11-12</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2023/11/12/Computer-science-2/">Computer science(2)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="点评一下大辉老师的学习通题目"><a href="#点评一下大辉老师的学习通题目" class="headerlink" title="点评一下大辉老师的学习通题目"></a>点评一下大辉老师的学习通题目</h1><h2 id="C语言程序设计"><a href="#C语言程序设计" class="headerlink" title="C语言程序设计"></a>C语言程序设计</h2><h4 id="数组与指针（2）"><a href="#数组与指针（2）" class="headerlink" title="数组与指针（2）"></a>数组与指针（2）</h4><ol>
-<li><img src="/../imgs/l/IMG_20231112_190441.jpg"></li>
-</ol>
-<p>这题简单，a是一个数组，p是一个指针，A中把数组赋给整型指针，将数组转化为指针类型，错误。</p>
-<p>B中，*q[4] 根据运算优先级，q先于[]结合，所以 *q[4]是一个指针数组（一个数组里面存的全是指针），a[i]是一个指针。所以B的赋值正确</p>
-<p>C中，p是一个指针，a[i]也是指针，正确</p>
-<p>D，太简单不解释</p>
-<p>2.<img src="/../imgs/l/2.jpg"></p>
-<p>声明了一个3行2列的数组，A,B,D选项都超出了范围</p>
-<p><img src="/../imgs/l/3.jpg"></p>
-<p>这题的C选项里面漏了0 </p>
-<p>A只是声明变量。B花括号外面不应该有数字。D超出了行数。</p>
-<p>第4题基础，不写</p>
-<p>第5题</p>
-<p><img src="/../imgs/l/4.jpg"></p>
-<p>p从a的首地址开始，第一个for 给数组赋值，第二个for输出数组</p>
-<p><img src="/../imgs/l/6.jpg"></p>
-<p>*p[3]表示一个指针数组，数组里面存了三个指针。p[0]&#x3D;a[1];表示p中元素从指针a[1]开始，p[0]+1就是a[1] [1]的地址.</p>
-<p><img src="/../imgs/l/7.jpg"></p>
-<p>根据数组的初始化，得出数组为 </p>
-<p>​     <strong>1 2 0</strong></p>
-<p>​     <strong>3 4 0</strong></p>
-<p>​     <strong>5 6 0</strong></p>
-<p>sum&#x3D;  a[1] [0]  + a[1] [1]+ a[2] [0]+ a[2] [1]+a[2] [2];</p>
-<p>​        &#x3D;   3+4+5+6&#x3D;18</p>
-<p>第8题 注意到列数组初始化一定要有参数</p>
-<p><img src="/../imgs/l/9.jpg"></p>
-<p>​                                                          </p>
-<p>（*p)[5]表示p是一个地址，这个地址指向一个数组，所以p[0]就是一个元素的地址了，p&#x3D;c表示p指向数组c，p就是c的首地址，p+1表示c[1]，不能指向元素。 <em>(p+3)表示</em></p>
-<p> *(c[3]), *(p+1)+3 表示 *（c[1])+3,不能表示元素。 *(p[0]+2) 表示 *(c[0]+2)就是 *(c[0] [2]).</p>
-<p>10.<img src="/../imgs/l/10.jpg"></p>
-<p>a+i表示指向a[i] [0],即指向二维数组第一行起始位置 ，可以理解为a+i 就是a[i]的地址，*使得它为a[i] [0]的地址，加上j后 就是a[i] [j]的地址。 本质上，a就是指针的指针，需要经过两次 *</p>
-<p>最后附上一张表</p>
-<table>
-<thead>
-<tr>
-<th align="center">指针</th>
-<th align="center">指针p指向</th>
-<th align="center">含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">p&#x3D;a</td>
-<td align="center">指向二维数组a</td>
-<td align="center">指向二维数组的起始位置</td>
-</tr>
-<tr>
-<td align="center">p&#x3D;a+1</td>
-<td align="center">指向二维数组a[1] [0]</td>
-<td align="center">指向二维数组第1行起始位置</td>
-</tr>
-<tr>
-<td align="center">p&#x3D;&amp;a[0] [0]+1</td>
-<td align="center">指向二维数组a[0] [1]</td>
-<td align="center">指向二维数组第0行第1列</td>
-</tr>
-<tr>
-<td align="center">p&#x3D;*a+1</td>
-<td align="center">指向二维数组a[0] [1]</td>
-<td align="center">指向二维数组第0行第1列</td>
-</tr>
-</tbody></table>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/11/12/Computer-science-2/" data-id="clrz6k5nl0004mkuocirdeidb" data-title="Computer science(2)" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -752,6 +716,10 @@
       <ul>
         
           <li>
+            <a href="/2024/03/22/CTF-Crypto-4/">CTF-Crypto-4</a>
+          </li>
+        
+          <li>
             <a href="/2024/03/20/CTF-Crypto-3/">CTF-Crypto-3</a>
           </li>
         
@@ -765,10 +733,6 @@
         
           <li>
             <a href="/2024/03/01/RCE/">RCE</a>
-          </li>
-        
-          <li>
-            <a href="/2024/02/29/ctf-php-3/">ctf-php-3</a>
           </li>
         
       </ul>
